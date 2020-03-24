@@ -6,115 +6,134 @@ tags:
 data:
   # ----- Grubhub & Door-Dash Varients -----
   - name: "Ambar India (Grubhub)"
-    match: "grubhubambarindia"
+    match: >
+      grubhubambarindia
     tags:
       - "delivery"
       - "restaurant"
 
   - name: "Auntie Anne's (Grubhub)"
-    match: "grubhubauntieannes"
+    match: >
+      grubhubauntieannes
     tags:
       - "delivery"
       - "fast-food"
 
   - name: "Buffalo Wild Wings (DoorDash)"
-    match: "doordash\*buffalo wild"
+    match: >
+      doordash\*buffalo wild
     tags:
       - "delivery"
       - "fast-food"
 
   - name: "Chick-Fil-A (Grubhub)"
-    match: "grubhubchickfila"
+    match: >
+      grubhubchickfila
     tags:
       - "delivery"
       - "fast-food"
 
   - name: "Cracker Barrel (DoorDash)"
-    match: "doordash\*cracker barre"
+    match: >
+      doordash\*cracker barre
     tags:
       - "delivery"
       - "restaurant"
 
   - name: "DESTIHL Restaurant & Brew Works (DoorDash)"
-    match: "doordash\*destihl"
+    match: >
+      doordash\*destihl
     tags:
       - "delivery"
       - "restaurant"
 
   - name: "El Toro Mexican Restaurant (DoorDash)"
-    match: "doordash\*el toro"
+    match: >
+      doordash\*el toro
     tags:
       - "delivery"
       - "restaurant"
 
   - name: "El Toro Mexican Restaurant (Grubhub)"
-    match: "grubhubeltoro"
+    match: >
+      grubhubeltoro
     tags:
       - "delivery"
       - "restaurant"
 
   - name: "Hooters (DoorDash)"
-    match: "doordash\*hooters"
+    match: >
+      doordash\*hooters
     tags:
       - "delivery"
       - "restaurant"
 
   - name: "Kentucky Fried Chicken (Grubhub)"
-    match: "grubhubkfc"
+    match: >
+      grubhubkfc
     tags:
       - "delivery"
       - "fast-food"
 
   - name: "Long John Silver's (DoorDash)"
-    match: "doordash\*long john"
+    match: >
+      doordash\*long john
     tags:
       - "delivery"
       - "fast-food"
 
   - name: "Meatheads (Grubhub)"
-    match: "grubhubmeatheads"
+    match: >
+      grubhubmeatheads
     tags:
       - "delivery"
       - "fast-food"
 
   - name: "Oishi Hibachi Steak House (Grubhub)"
-    match: "grubhuboishi"
+    match: >
+      grubhuboishi
     tags:
       - "delivery"
       - "restaurant"
 
   - name: "Popeyes (Grubhub)"
-    match: "grubhubpopeyes"
+    match: >
+      grubhubpopeyes
     tags:
       - "delivery"
       - "fast-food"
 
   - name: "Smoky's House BBQ (Grubhub)"
-    match: "grubhubsmokyshousebbq"
+    match: >
+      grubhubsmokyshousebbq
     tags:
       - "delivery"
       - "restaurant"
 
   - name: "Steak N' Shake (DoorDash)"
-    match: "doordash\*steak n shake"
+    match: >
+      doordash\*steak n shake
     tags:
       - "delivery"
       - "fast-food"
 
   - name: "Thara Thai (DoorDash)"
-    match: "doordash\*thara thai"
+    match: >
+      doordash\*thara thai
     tags:
       - "delivery"
       - "restaurant"
 
   - name: "Watson's Shack & Rail (DoorDash)"
-    match: "doordash\*watsons shack"
+    match: >
+      doordash\*watsons shack
     tags:
       - "delivery"
       - "restaurant"
 
   - name: "Wingin Out (Grubhub)"
-    match: "grubhubwinginout"
+    match: >
+      grubhubwinginout
     tags:
       - "delivery"
       - "fast-food"
@@ -122,291 +141,363 @@ data:
 
   # ----- Non-Grubhub Varients -----
   - name: "Arby's"
-    match: "arby'?s"
+    match: >
+      arby'?s
     tags: ["fast-food"]
 
   - name: "Applebee's Grill & Bar"
-    match: "applebee'?s"
+    match: >
+      applebee'?s
     tags: ["restaurant"]
    
   - name: "Baxter's American Grill"
-    match: "baxter'?s"
+    match: >
+      baxter'?s
     tags: ["restaurant"]
 
   - name: "BJ's Restaurant"
-    match: "bj'?s restaurant"
+    match: >
+      bj'?s restaurant
     tags: ["restaurant"]
 
   - name: "Black Dog Smoke & Ale House"
-    match: "black dog"
+    match: >
+      black dog
     tags: ["restaurant"]
 
   - name: "Bunny's Tavern"
-    match: "bunny[' ]?s tavern"
+    match: >
+      bunny[' ]?s tavern
     tags: ["bar"]
 
   - name: "Cactus Grill"
-    match: "cactus grill"
+    match: >
+      cactus grill
     tags: ["fast-food"]
 
   - name: "Cafe Kopi"
-    match: "cafe kopi"
+    match: >
+      cafe kopi
     tags: ["cafe"]
 
   - name: "Caribbean Grill"
-    match: "carribbean grill"
+    match: >
+      carribbean grill
     tags: ["fast-food"]
 
   - name: "Carving Room Kitchen & Bar"
-    match: "carving room"
+    match: >
+      carving room
     tags: ["restaurant"]
 
   - name: "Champaign Public Library Cafe"
-    match: "cafe at the library"
+    match: >
+      cafe at the library
     tags: ["cafe"]
 
   - name: "Chick-Fil-A"
-    match: "chick\-?fil\-?a"
+    match: >
+      chick\-?fil\-?a
     tags: ["fast-food"]
 
   - name: "China King"
-    match: "china king"
+    match: >
+      china king
     tags: ["fast-food"]
 
   - name: "Clever Moose Cafe"
-    match: "clever moose"
+    match: >
+      clever moose
     tags: ["cafe"]
 
   - name: "Cracker Barrel"
-    match: "cracker barrel"
+    match: >
+      cracker barrel
     tags: ["restaurant"]
 
   - name: "Crane Alley"
-    match: "crane alley"
+    match: >
+      crane alley
     tags: ["restaurant"]
 
   - name: "DESTIHL Restaurant & Brew Works"
-    match: "destihl"
+    match: >
+      destihl
     tags: ["restaurant"]
 
   - name: "Dewey Destin Seafood Restaurant"
-    match: "dewey destin seafood"
+    match: >
+      dewey destin seafood
     tags: ["restaurant"]
 
   - name: "Domino's Pizza"
-    match: "domino'?s"
+    match: >
+      domino'?s
     tags: ["delivery", "fast-food"]
 
   - name: "Dumpling Noodle BBQ"
-    match: "dumpling noodle bbq"
+    match: >
+      dumpling noodle bbq
     tags: ["restaurant"]
 
   - name: "Dunkin' Donuts"
-    match: "dunkin'?"
+    match: >
+      dunkin'?
     tags: ["fast-food"]
 
   - name: "Einstein Bros. Bagles"
-    match: "einstein('s)?"
+    match: >
+      einstein('s)?
     tags: ["fast-food"]
 
   - name: "El Patron Mexican Restaurant"
-    match: "el patron"
+    match: >
+      el patron
     tags: ["restaurant"]
 
   - name: "El Toro Mexican Restaurant"
-    match: "el toro"
+    match: >
+      el toro
     tags: ["restaurant"]
 
   - name: "Esquire Lounge"
-    match: "esquire lounge"
+    match: >
+      esquire lounge
     tags: ["bar"]
 
   - name: "Farren's Pub & Eatery"
-    match: "farren'?s pub & eatery"
+    match: >
+      farren'?s pub & eatery
     tags: ["restaurant"]
 
   - name: "Firehouse Subs"
-    match: "firehouse subs"
+    match: >
+      firehouse subs
     tags: ["fast-food"]
 
   - name: "Five Guys Burgers And Fries"
-    match: "(5|five) ?guys"
+    match: >
+      (5|five) ?guys
     tags: ["fast-food"]
 
   - name: "Golden Harbor"
-    match: "golden harbor"
+    match: >
+      golden harbor
     tags: ["restaurant"]
 
   - name: "Happy Donuts & Breakfast"
-    match: "happy donuts"
+    match: >
+      happy donuts
     tags: ["restaurant"]
 
   - name: "Hooters"
-    match: "hooters"
+    match: >
+      hooters
     tags: ["restaurant"]
 
   - name: "Huaraches Moroleon"
-    match: "huaraches"
+    match: >
+      huaraches
     tags: ["restaurant"]
 
   - name: "Huber's"
-    match: "huber'?s"
+    match: >
+      huber'?s
     tags: ["bar"]
 
   - name: "Italian Village Restaurants"
-    match: "italian village chicago"
+    match: >
+      italian village chicago
     tags: ["restaurant"]
 
   - name: "Jet's Pizza"
-    match: "jet'?s pizza"
+    match: >
+      jet'?s pizza
     tags:
       - "delivery"
       - "fast-food"
 
   - name: "Kentucky Fried Chicken"
-    match: "\s+kfc\s+"
+    match: >
+      \s+kfc\s+
     tags: ["fast-food"]
 
   - name: "Las Velas Mexican Restaurant"
-    match: "las velas"
+    match: >
+      las velas
     tags: ["restaurant"]
 
   - name: "Li'l Porgy's BBQ"
-    match: "li'?l porgy'?s"
+    match: >
+      li'?l porgy'?s
     tags: ["fast-food"]
 
   - name: "Longhorn Steak House"
-    match: "longhorn steak"
+    match: >
+      longhorn steak
     tags: ["restaurant"]
 
   - name: "Maize Mexican Grill"
-    match: "maize"
+    match: >
+      maize
     tags: ["restaurant"]
 
   - name: "Masijta Grill"
-    match: "masijta"
+    match: >
+      masijta
     tags: ["restaurant"]
 
   - name: "McAlister's Deli"
-    match: "mcalister'?s"
+    match: >
+      mcalister'?s
     tags: ["fast-food"]
 
   - name: "McDonald's"
-    match: "mcdonald'?s"
+    match: >
+      mcdonald'?s
     tags: ["fast-food"]
 
   - name: "Meatheads"
-    match: "meatheads"
+    match: >
+      meatheads
     tags: ["fast-food"]
 
   - name: "Moki Sushi"
-    match: "moki sushi"
+    match: >
+      moki sushi
     tags: ["restaurant"]
 
   - name: "Monical's Pizza"
-    match: "monical'?s pizza"
+    match: >
+      monical'?s pizza
     tags: ["restaurant"]
 
   - name: "Niro's Gyros"
-    match: "niro'?s gyros"
+    match: >
+      niro'?s gyros
     tags: ["fast-food"]
 
   - name: "Oishi Hibachi Steak House"
-    match: "oishi hibachi"
+    match: >
+      oishi hibachi
     tags: ["restaurant"]
 
   - name: "Old Orchard Lanes & Links"
-    match: "old orchard lanes"
+    match: >
+      old orchard lanes
     tags: ["fast-food"]
 
   - name: "Olive Garden"
-    match: "olive garden"
+    match: >
+      olive garden
     tags: ["restaurant"]
 
   - name: "Pancheros Mexican Grill"
-    match: "pancheros mexican"
+    match: >
+      pancheros mexican
     tags: ["fast-food"]
 
   - name: "Panera Bread"
-    match: "panera bread"
+    match: >
+      panera bread
     tags: ["fast-food"]
 
   - name: "Paul Bakery & Cafe"
-    match: "paul bakery"
+    match: >
+      paul bakery
     tags: ["cafe"]
 
   - name: "Pekara Bakery & Bistro"
-    match: "pekara"
+    match: >
+      pekara
     tags: ["restaurant"]
 
   - name: "Popeyes"
-    match: "popeyes"
+    match: >
+      popeyes
     tags: ["fast-food"]
 
   - name: "Sammy's Pancake House"
-    match: "sammy'?s pancake"
+    match: >
+      sammy'?s pancake
     tags: ["restaurant"]
 
   - name: "Scotty's Brewhouse"
-    match: "scotty'?s brewhouse"
+    match: >
+      scotty'?s brewhouse
     tags: ["restaurant"]
 
   - name: "Seven Saints"
-    match: "seven saints"
+    match: >
+      seven saints
     tags: ["restaurant"]
 
   - name: "Slim Chickens"
-    match: "slim chickens"
+    match: >
+      slim chickens
     tags: ["fast-food"]
 
   - name: "Smoky's House BBQ"
-    match: "smoky[' ]?s house"
+    match: >
+      smoky[' ]?s house
     tags: ["restaurant"]
 
   - name: "Subway"
-    match: "subway"
+    match: >
+      subway
     tags: ["fast-food"]
 
   - name: "Sun Singer Restaurant"
-    match: "sun ?singer"
+    match: >
+      sun ?singer
     tags: ["restaurant"]
 
   - name: "Taco Bell"
-    match: "taco bell"
+    match: >
+      taco bell
     tags: ["fast-food"]
 
   - name: "Texas Roadhouse"
-    match: "texas roadhouse"
+    match: >
+      texas roadhouse
     tags: ["restaurant"]
 
   - name: "Thara Thai"
-    match: "thara ?thai"
+    match: >
+      thara ?thai
     tags: ["restaurant"]
 
   - name: "The Blind Pig Brewery"
-    match: "blind pig"
+    match: >
+      blind pig
     tags: ["bar"]
 
   - name: "The Clark Bar"
-    match: "clark bar"
+    match: >
+      clark bar
     tags: ["bar"]
 
   - name: "The Original Pancake House"
-    match: "the original panca"
+    match: >
+      the original panca
     tags: ["restaurant"]
 
   - name: "Top Food"
-    match: "top food"
+    match: >
+      top food
     tags: ["restaurant"]
 
   - name: "Tropical Smoothie"
-    match: "tropical smoothie"
+    match: >
+      tropical smoothie
     tags: ["fast-food"]
 
   - name: "Watson's Shack & Rail"
-    match: "watson'?s shack & rail"
+    match: >
+      watson'?s shack & rail
     tags: ["restaurant"]
 
   - name: "Wendy's"
-    match: "wendy'?s"
+    match: >
+      wendy'?s
     tags: ["fast-food"]
