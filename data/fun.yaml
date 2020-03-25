@@ -1,0 +1,73 @@
+# Fun
+# ---
+
+tags:
+  - 'fun'
+
+data:
+  # ----- Festivals -----
+  - name: 'Matsuri (Festival)'
+    match: >-
+      matsuri
+    tags:
+      - 'festival'
+
+  # ----- Indoor Activities -----
+  - name: 'Elevate Trampoline Park'
+    match: >-
+      elevate trampoline
+    tags:
+      - 'indoors'
+
+  - name: 'Japan House'
+    match: >-
+      japan house
+    tags:
+      - 'indoors'
+
+  - name: 'The Ratchet Hatchet (Axe Throwing)'
+    match: >-
+      the ratchet hat
+    tags:
+      - 'indoors'
+
+  # ----- Museums & Zoos -----
+  - name: 'Chicago Museum of Science & Industry'
+    match: >-
+      museum of scien.*chicago
+    tags:
+      - 'indoors'
+      - 'museum'
+
+  - name: 'Shedd Aquarium (Chicago)'
+    match: >-
+      shedd aquarium
+    tags:
+      - 'indoors'
+      - 'zoo'
+
+  # ----- Movies & Theatre -----
+  - name: 'Fandango (Movie Tickets)'
+    match: >-
+      fandango
+    tags:
+      - 'theatre'
+
+  - name: 'GQT Savoy 16 IMAX'
+    match: >-
+      imax savoy
+    tags:
+      - 'theatre'
+
+  - name: 'The Art Theater'
+    match: >-
+      the art theater
+    tags:
+      - 'theatre'
+
+  # ----- Outdoor Activities -----
+  - name: "Clement's Canoes"
+    match: >-
+      clement'?s canoes
+    tags:
+      - 'outdoors'

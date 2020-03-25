@@ -1,0 +1,24 @@
+# Money Transfers
+# ---------------
+
+tags:
+  - 'xfer'
+
+data:
+  - name: 'Transfer -> Savings'
+    match: >-
+      to share.*savings account
+    tags:
+      - 'xfer-savings'
+
+  - name: "Transfer -> Savings (Harrison's Schooling)"
+    match: >-
+      to share.*(harrison'?s schooling)
+    tags:
+      - 'xfer-savings'
+ 
+  - name: 'Transfer -> Savings (Remote Car Starter)'
+    match: >-
+      to share.*remote car starter
+    tags:
+      - 'xfer-savings'

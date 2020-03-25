@@ -1,0 +1,25 @@
+# Miscellaneous
+# -------------
+
+tags:
+  - 'misc'
+
+data:
+  # ----- Book Stores -----
+  - name: 'FriendShop Bookstore (Champaign Public Library)'
+    match: >-
+      friendshop bookstor
+    tags:
+      - 'books'
+
+  - name: "Jane Addam's Book Shop"
+    match: >-
+      jane addam'?s book shop
+    tags:
+      - 'books'
+
+  - name: 'Priceless Books'
+    match: >-
+      price\-?less books
+    tags:
+      - 'books'

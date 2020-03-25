@@ -1,0 +1,60 @@
+# Groceries
+# ---------
+
+tags:
+  - 'groceries'
+
+data:
+  - name: 'CVS Pharmacy'
+    match: >-
+      cvs/pharmacy
+    tags:
+      - 'pharmacy'
+
+  - name: "Binny's Beverage Depot"
+    match: >-
+      binny'?s beverage
+    tags:
+      - 'alcohol'
+
+  - name: 'Friar Tuck'
+    match: >-
+      friar tuck
+    tags:
+      - 'alcohol'
+
+  - name: 'Green Chef'
+    match: >-
+      green chef
+    tags:
+      - 'delivery'
+
+  - name: 'Harvest Market'
+    match: >-
+      harvest market
+
+  - name: 'Publix'
+    match: >-
+      publix
+
+  - name: "Sam's Club"
+    match: >-
+      sam'?s ?club
+
+  - name: 'Schnucks'
+    match: >-
+      schnucks
+
+  - name: 'Walgreens'
+    match: >-
+      walgreens
+    tags:
+      - 'pharmacy'
+
+  - name: 'Wal-Mart'
+    match: >-
+      wal\-?mart
+
+  - name: 'World Harvest'
+    match: >-
+      world harvest

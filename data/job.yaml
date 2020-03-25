@@ -1,0 +1,12 @@
+# Job-Related Transactions
+# ------------------------
+
+tags:
+  - 'job'
+
+data:
+  - name: 'Wolfram Research Inc.'
+    match: >-
+      wolfram research
+    tags:
+      - 'income'
