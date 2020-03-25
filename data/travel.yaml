@@ -40,7 +40,26 @@ data:
       - 'hotel'
       - 'lodging'
 
-  # ----- Transportation (Train, Bus, & Flights) -----
+  # ----- Parking -----
+  - name: 'First Avenue Garage & Station (Parking)'
+    match: >-
+      ppap first avenue
+    tags:
+      - 'parking'
+
+  - name: 'Mobile Meter (Parking)'
+    match: >-
+      mobile meter
+    tags:
+      - 'parking'
+
+  - name: 'ParkFast (Parking)'
+    match: >-
+      parkfast
+    tags:
+      - 'parking'
+
+  # ----- Transportation (Train, Bus, Flights, & Uber) -----
   - name: 'American Airlines'
     match: >-
       american air
@@ -55,4 +74,127 @@ data:
       - 'train'
       - 'transportation'
 
+  - name: 'Champaign MTD Bus Ticket'
+    match: >-
+      token transit pass
+    tags:
+      - 'bus'
+      - 'transportation'
+
+  - name: 'Pentagon City Station (Washington DC)'
+    match: >-
+      1250 hayes street
+    tags:
+      - 'metro'
+      - 'transportation'
+
+  - name: 'Rosslyn Station (Washington DC)'
+    match: >-
+      1850 north moore street
+    tags:
+      - 'metro'
+      - 'transportation'
+
+  - name: 'Uber'
+    match: >-
+      uber trip
+    tags:
+      - 'transportation'
+      - 'uber'
+
   # ----- Gas Stations -----
+  - name: 'Chevron (Gas Station)'
+    match: >-
+      chevron
+    tags:
+      - 'gas'
+
+  - name: 'Circle K (Gas Station)'
+    match: >-
+      circle k
+    tags:
+      - 'gas'
+
+  - name: 'Emmorton Exon (Gas Station)'
+    match: >-
+      emmorton 1804
+    tags:
+      - 'gas'
+
+  - name: 'Flying J Travel Center (Gas Station)'
+    match: >-
+      flying j
+    tags:
+      - 'gas'
+
+  - name: 'Gas America (Gas Station)'
+    match: >-
+      gas america
+    tags:
+      - 'gas'
+
+  - name: 'Haymakers (Gas Station)'
+    match: >-
+      haymakers
+    tags:
+      - 'gas'
+
+  - name: 'Inland (Gas Station)'
+    match: >-
+      inland 612
+    tags:
+      - 'gas'
+
+  - name: "Jordan's Kwik Stop (Gas Station)"
+    match: >-
+      jordan'?s kwik stop
+    tags:
+      - 'gas'
+   
+  - name: "Love's (Gas Station)"
+    match: >-
+      love[' ]?s country
+    tags:
+      - 'gas'
+
+  - name: 'Mach 1 (Gas Station)'
+    match: >-
+      mach 1
+    tags:
+      - 'gas'
+
+  - name: 'Matteson Fuel (Gas Station)'
+    match: >-
+      matteson fuel
+    tags:
+      - 'gas'
+
+  - name: 'Neoga ATFM (Gas Station)'
+    match: >-
+      neoga truck & fuel mart
+    tags:
+      - 'gas'
+
+  - name: 'Pilot (Gas Station)'
+    match: >-
+      pilot \#
+    tags:
+      - 'gas'
+
+  - name: 'Sheetz (Gas Station)'
+    match: >-
+      sheetz
+    tags:
+      - 'gas'
+
+  - name: 'Shell (Gas Station)'
+    match: >-
+      shell service station
+    tags:
+      - 'gas'
+
+  - name: 'Tom Thumb (Gas Station)'
+    match: >-
+      tom thumb
+    tags:
+      - 'gas'

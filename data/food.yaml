@@ -26,6 +26,13 @@ data:
       - "delivery"
       - "fast-food"
 
+  - name: "Buffalo Wild Wings (Grubhub)"
+    match: >
+      grubhubbuffalowildwin
+    tags:
+      - "delivery"
+      - "fast-food"
+
   - name: "Chick-Fil-A (Grubhub)"
     match: >
       grubhubchickfila
@@ -110,7 +117,7 @@ data:
       - "delivery"
       - "restaurant"
 
-  - name: "Steak N' Shake (DoorDash)"
+  - name: "Steak 'n Shake (DoorDash)"
     match: >
       doordash\*steak n shake
     tags:
@@ -140,6 +147,11 @@ data:
 
 
   # ----- Non-Grubhub Varients -----
+  - name: '17th Street BBQ'
+    match: >-
+      17th street bbq
+    tags: ["restaurant"]
+
   - name: "Arby's"
     match: >
       arby'?s
@@ -182,7 +194,7 @@ data:
 
   - name: "Caribbean Grill"
     match: >
-      carribbean grill
+      caribbean grill
     tags: ["fast-food"]
 
   - name: "Carving Room Kitchen & Bar"
@@ -209,6 +221,16 @@ data:
     match: >
       clever moose
     tags: ["cafe"]
+
+  - name: 'Corelife Eatery'
+    match: >-
+      corelife
+    tags: ["restaurant"]
+
+  - name: 'Courier Cafe'
+    match: >-
+      courier cafe
+    tags: ["restaurant"]
 
   - name: "Cracker Barrel"
     match: >
@@ -250,6 +272,11 @@ data:
       einstein('s)?
     tags: ["fast-food"]
 
+  - name: 'El Mustafa'
+    match: >-
+      el mustafa
+    tags: ["restaurant"]
+
   - name: "El Patron Mexican Restaurant"
     match: >
       el patron
@@ -279,6 +306,16 @@ data:
     match: >
       (5|five) ?guys
     tags: ["fast-food"]
+
+  - name: "Garcia's Pizza In A Pan"
+    match: >-
+      garcia'?s pizza in a pan
+    tags: ["fast-food"]
+
+  - name: 'Golden Corral'
+    match: >-
+      golden corral
+    tags: ['restaurant']
 
   - name: "Golden Harbor"
     match: >
@@ -340,6 +377,16 @@ data:
   - name: "Maize Mexican Grill"
     match: >
       maize
+    tags: ["restaurant"]
+
+  - name: 'Market Creations (Chicago)'
+    match: >-
+      market creations
+    tags: ["restaurant"]
+
+  - name: "Mase's Place Bar & Grill"
+    match: >-
+      mase'?s place
     tags: ["restaurant"]
 
   - name: "Masijta Grill"
@@ -417,6 +464,16 @@ data:
       popeyes
     tags: ["fast-food"]
 
+  - name: 'Reagan National Airport Consession Stand'
+    match: >-
+      gab term b dca
+    tags: ["fast-food"]
+
+  - name: 'Riggs Beer Company'
+    match: >-
+      riggs beer comp
+    tags: ['bar']
+
   - name: "Sammy's Pancake House"
     match: >
       sammy'?s pancake
@@ -442,6 +499,16 @@ data:
       smoky[' ]?s house
     tags: ["restaurant"]
 
+  - name: 'Starbucks'
+    match: >-
+      starbucks
+    tags: ['cafe']
+
+  - name: "Steak 'n Shake"
+    match: >-
+      steak\-n\-shake
+    tags: ["fast-food"]
+
   - name: "Subway"
     match: >
       subway
@@ -455,6 +522,11 @@ data:
   - name: "Taco Bell"
     match: >
       taco bell
+    tags: ["fast-food"]
+
+  - name: 'Tailwind Consessions (Central Illinois Regional Airport)'
+    match: >-
+      tailwind bloomington
     tags: ["fast-food"]
 
   - name: "Texas Roadhouse"
@@ -482,6 +554,11 @@ data:
       the original panca
     tags: ["restaurant"]
 
+  - name: 'The Pantry'
+    match: >-
+      the pantry tuscola
+    tags: ['fast-food']
+
   - name: "Top Food"
     match: >
       top food
@@ -501,3 +578,9 @@ data:
     match: >
       wendy'?s
     tags: ["fast-food"]
+
+  # ----- Vending Machines -----
+  - name: 'Vending Machine'
+    match: >-
+      (vend llc)|(snack soda vending)|(coca cola)
+    tags: ["vending-machine"]

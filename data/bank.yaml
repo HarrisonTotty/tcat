@@ -1,0 +1,52 @@
+# Bank Stuff & Money Transfers
+# ----------------------------
+
+tags:
+  - 'bank'
+
+data:
+  # ----- Uncategorized -----
+  - name: '% APY Earned'
+    match: >-
+      apy earned
+
+  - name: 'ATM Rebate'
+    match: >-
+      atm rebate
+
+  - name: 'Check Deposit'
+    match: >-
+      ^check \#
+
+  - name: 'Mobile Deposit'
+    match: >-
+      mobile deposit
+
+  # ----- Money Transfers -----
+  - name: 'Transfer: Eglin FCU -> Checking'
+    match: >-
+      alliant cu\.eglin federal
+    tags:
+      - 'xfer'
+      - 'xfer-checking'
+ 
+  - name: 'Transfer: Checking -> Savings'
+    match: >-
+      to share 01
+    tags:
+      - 'xfer'
+      - 'xfer-savings'
+
+  - name: "Transfer: Checking -> Savings (Harrison's Schooling)"
+    match: >-
+      to share 21
+    tags:
+      - 'xfer'
+      - 'xfer-savings'
+ 
+  - name: 'Transfer: Checking -> Savings (Remote Car Starter)'
+    match: >-
+      to share 22
+    tags:
+      - 'xfer'
+      - 'xfer-savings'

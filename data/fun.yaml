@@ -71,3 +71,10 @@ data:
       clement'?s canoes
     tags:
       - 'outdoors'
+
+  # ----- Video Games -----
+  - name: 'Steam Game Purchase'
+    match: >-
+      steamgames\.com
+    tags:
+      - 'video-games'

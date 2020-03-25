@@ -5,7 +5,70 @@ tags:
   - 'misc'
 
 data:
+  # ----- Uncategorized -----
+  - name: "Captain Jack's Treasure"
+    match: >-
+      captain jack'?s treasure
+
+  - name: 'Champain County ?'
+    match: >-
+      ^champaign county$
+   
+  - name: 'Champaign Park District'
+    match: >-
+      champaign park distric
+
+  - name: 'City of Urbana ?'
+    match: >-
+      city of urbana
+
+  - name: 'Family Dollar'
+    match: >-
+      family dollar
+
+  - name: 'Hansen & Co. Barber Shop'
+    match: >-
+      hans[eo]n & co
+
+  - name: "O'Neill Boardshorts & Clothing"
+    match: >-
+      oneill clothing
+
+  - name: 'Prairieland Feeds'
+    match: >-
+      prairie ?land feeds
+
+  - name: 'Rainstorm Car Wash'
+    match: >-
+      rainstorm
+
+  - name: 'SQ Champaign County'
+    match: >-
+      sq \*champaign count
+
+  - name: 'Starcrest Cleaners'
+    match: >-
+      starcrest cleaners
+
+  - name: 'University of Illinois'
+    match: >-
+      universityofillinois
+
+  - name: 'Venmo Transfer'
+    match: >-
+      ^venmo
+
+  - name: 'Visa International Transaction Fee'
+    match: >-
+      visa international transaction fee
+
   # ----- Book Stores -----
+  - name: 'Barnes & Noble'
+    match: >-
+      barnesnoble
+    tags:
+      - 'books'
+   
   - name: 'FriendShop Bookstore (Champaign Public Library)'
     match: >-
       friendshop bookstor
@@ -23,3 +86,41 @@ data:
       price\-?less books
     tags:
       - 'books'
+
+  # ----- Home Improvement -----
+  - name: "Menard's"
+    match: >-
+      mnrd\-champaign
+    tags:
+      - 'home-improvement'
+
+  # ----- Online Purchases -----
+  - name: 'Amazon.com Purchase'
+    match: >-
+      (amzn mktp)|(amazon\.com)
+    tags:
+      - 'online-purchases'
+
+  - name: 'Canakit.com Purchase'
+    match: >-
+      canakit\.com
+    tags:
+      - 'online-purchases'
+
+  - name: "Etsy.com Purchase"
+    match: >-
+      etsy\.com
+    tags:
+      - 'online-purchases'
+
+  - name: 'Paypal'
+    match: >-
+      paypal
+    tags:
+      - 'online-purchases'
+
+  - name: 'Target.com Purchase'
+    match: >-
+      target\.com
+    tags:
+      - 'online-purchases'

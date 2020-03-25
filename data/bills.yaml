@@ -5,6 +5,96 @@ tags:
   - 'bills'
 
 data:
+  # ----- Uncategorized -----
+  - name: 'Amazon Prime Bill'
+    match: >-
+      amazon prime
+
+  - name: 'Credit Card?'
+    match: >-
+      cardmember serv
+
+  - name: 'Dollar Shave Club'
+    match: >-
+      dollar ?shave ?club
+
+  - name: 'USAA\.com Payment'
+    match: >-
+      usaa\.com pay
+
+  # ----- Insurance -----
+  - name: 'USAA Property & Casualty Insurance'
+    match: >-
+      usaa p&c
+    tags:
+      - 'insurance'
+
+  # ----- Internet/Data Services -----
+  - name: 'Comcast'
+    match: >-
+      comcast
+    tags:
+      - 'internet'
+
+  - name: 'Straight Talk'
+    match: >-
+      straighttalk\*services
+    tags:
+      - 'internet'
+
+  # ----- Loans/Mortgage ----
+  - name: 'Freedom Mortgage'
+    match: >-
+      ^freedom$
+    tags:
+      - 'loans'
+
+  - name: 'Wofcset Auto Loan'
+    match: >-
+      wofcset
+    tags:
+      - 'loans'
+
+  # ----- Medical -----
+  - name: 'Christie Clinic'
+    match: >-
+      christie clinic
+    tags:
+      - 'medical'
+
   - name: 'Evergreen Coaching & Counseling'
     match: >-
       evergreen coaching
+    tags:
+      - 'medical'
+
+  - name: 'University of Illinois Veterinary Teaching Hospital'
+    match: >-
+      u of i vet hospital
+    tags:
+      - 'medical'
+
+  # ----- Utilities -----
+  - name: 'American Water (Illinois)'
+    match: >-
+      (illinois\-america)|(american\-water)
+    tags:
+      - 'utilities'
+
+  - name: 'Ameren (Illinois)'
+    match: >-
+      ^amerenil$
+    tags:
+      - 'utilities'
+
+  - name: 'Illini Recycling'
+    match: >-
+      illini recycling
+    tags:
+      - 'utilities'
+
+  - name: 'Champaign-Urbana Sanitation District'
+    match: >-
+      urbana & champaign sani
+    tags:
+      - 'utilities'

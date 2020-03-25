@@ -5,6 +5,24 @@ tags:
   - 'job'
 
 data:
+  - name: 'AHEAD LLC (Reimbursement)'
+    match: >-
+      ahead.*direct\-pay
+    tags:
+      - 'reimbursements'
+
+  - name: 'AHEAD LLC (Salary)'
+    match: >-
+      ahead.*payroll
+    tags:
+      - 'income'
+
+  - name: 'American Express Payment'
+    match: >-
+      amex epayment
+    tags:
+      - 'business-purchases'
+   
   - name: 'Wolfram Research Inc.'
     match: >-
       wolfram research
