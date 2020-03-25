@@ -1,0 +1,58 @@
+# Travel
+# ------
+tags:
+  - 'travel'
+
+data:
+  # ----- Airbnb & Hotels (Lodging) -----
+  - name: 'Airbnb'
+    match: >-
+      airbnb
+    tags:
+      - 'airbnb'
+      - 'lodging'
+
+  - name: 'Hilton Garden Inn'
+    match: >-
+      hilton garden
+    tags:
+      - 'hotel'
+      - 'lodging'
+
+  - name: 'Holiday Inn'
+    match: >-
+      holiday inn
+    tags:
+      - 'hotel'
+      - 'lodging'
+
+  - name: 'Ramada Inn'
+    match: >-
+      ramada inn
+    tags:
+      - 'hotel'
+      - 'lodging'
+
+  - name: 'Super 8 Hotel'
+    match: >-
+      super 8
+    tags:
+      - 'hotel'
+      - 'lodging'
+
+  # ----- Transportation (Train, Bus, & Flights) -----
+  - name: 'American Airlines'
+    match: >-
+      american air
+    tags:
+      - 'flight'
+      - 'transportation'
+
+  - name: 'Amtrak (Train)'
+    match: >-
+      amtrak
+    tags:
+      - 'train'
+      - 'transportation'
+
+  # ----- Gas Stations -----
