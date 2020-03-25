@@ -93,11 +93,11 @@ class Categorizer:
         '''
         cat = []
         for t in transactions:
+            tc = copy.deepcopy(t)
             if cdesc := self.categorize(t['desc']):
-                tc = copy.deepcopy(t)
                 tc['name'] = cdesc['name']
                 tc['tags'] = cdesc['tags']
-                cat.append(tc)
+            cat.append(tc)
         return cat
 
     def tcat(self, transactions):
@@ -217,3 +217,11 @@ def tprint(transaction, extended=False):
     print('Amount:      ' + dstr(transaction['amount']))
     print('Balance:     ' + dstr(transaction['bal']))
     print('Tags:        ' + str(transaction['tags']))
+
+
+def tuncat(transactions):
+    '''
+    Returns which transactions of the given list of transactions have yet to be
+    categorized or which were not tagged when categorized.
+    '''
+    return [t for t in transactions if not t['tags']]
