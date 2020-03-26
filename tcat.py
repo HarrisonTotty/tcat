@@ -157,6 +157,35 @@ def parse_csv(csv_file, bank=None, account=None):
     return parsed
 
 
+def tags(transactions):
+    '''
+    Returns the list of all tags present in the specified list of transactions.
+    '''
+    tags = []
+    for t in transactions:
+        tags.extend(t['tags'])
+    return sorted(list(set(tags)))
+
+
+def tcounts(transactions):
+    '''
+    Returns a dictionary of transaction name-count pairs given the specified list of transactions.
+    '''
+    counts = {}
+    for t in transactions:
+        if 'name' in t and t['name']:
+            if t['name'] in counts:
+                counts[t['name']] += 1
+            else:
+                counts[t['name']] = 1
+        else:
+            if 'UNKNOWN' in counts:
+                counts['UNKNOWN'] += 1
+            else:
+                counts['UNKNOWN'] = 1
+    return {k: counts[k] for k in sorted(counts, key=counts.get, reverse=True)}
+
+
 def tcoverage(transactions):
     '''
     Returns the percentage of transactions which have been categorized.
