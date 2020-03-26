@@ -17,6 +17,14 @@ data:
     tags:
       - 'alcohol'
 
+  - name: 'Dollar General'
+    match: >-
+      dollar\-general
+
+  - name: 'Fresh International Market'
+    match: >-
+      fresh intl\. market
+
   - name: 'Friar Tuck'
     match: >-
       friar tuck
@@ -32,6 +40,10 @@ data:
   - name: 'Harvest Market'
     match: >-
       harvest market
+
+  - name: 'Instacart'
+    match: >-
+      instacart
 
   - name: 'Publix'
     match: >-

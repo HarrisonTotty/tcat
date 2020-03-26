@@ -14,6 +14,10 @@ data:
     match: >-
       atm rebate
 
+  - name: 'ATM Withdrawal'
+    match: >-
+      (cardtronics ccsb)|(first mid bank)
+
   - name: 'Check Deposit'
     match: >-
       ^check \#

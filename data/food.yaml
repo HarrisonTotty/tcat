@@ -152,6 +152,11 @@ data:
       17th street bbq
     tags: ["restaurant"]
 
+  - name: 'Amaravati Indian Royal Cuisine'
+    match: >-
+      amaravati indian
+    tags: ['restaurant']
+
   - name: "Arby's"
     match: >
       arby'?s
@@ -167,6 +172,21 @@ data:
       baxter'?s
     tags: ["restaurant"]
 
+  - name: 'Bayern Stube'
+    match: >-
+      bayern stube
+    tags: ['restaurant']
+
+  - name: "Bentley's Pub"
+    match: >-
+      bentley['\`]?s pub
+    tags: ['bar']
+
+  - name: "Biaggi's Ristorante Italiano"
+    match: >-
+      biaggi'?s
+    tags: ['restaurant']
+
   - name: "BJ's Restaurant"
     match: >
       bj'?s restaurant
@@ -176,6 +196,16 @@ data:
     match: >
       black dog
     tags: ["restaurant"]
+
+  - name: 'Blaze Pizza'
+    match: >-
+      blaze pizza
+    tags: ['fast-food']
+
+  - name: 'Buffalo Wild Wings'
+    match: >-
+      bww 3327 savoy
+    tags: ['fast-food']
 
   - name: "Bunny's Tavern"
     match: >
@@ -212,10 +242,25 @@ data:
       chick\-?fil\-?a
     tags: ["fast-food"]
 
+  - name: "Chili's Bar & Grill"
+    match: >-
+      chili[ ']?s grill
+    tags: ['restaurant']
+
   - name: "China King"
     match: >
       china king
     tags: ["fast-food"]
+
+  - name: 'Chinatown Buffet'
+    match: >-
+      chinatown buffet
+    tags: ['restaurant']
+
+  - name: 'Cinnabon'
+    match: >-
+      cinnabon
+    tags: ['fast-food']
 
   - name: "Clever Moose Cafe"
     match: >
@@ -242,10 +287,24 @@ data:
       crane alley
     tags: ["restaurant"]
 
+  - name: "Culver's Restaurant"
+    match: >-
+      culver[ ']?s
+    tags: ['fast-food']
+
+  - name: "Denny's"
+    match: >-
+      denny'?s
+    tags: ['restaurant']
+
   - name: "DESTIHL Restaurant & Brew Works"
     match: >
       destihl
     tags: ["restaurant"]
+
+  - name: 'Destin Seafood Festival'
+    match: >-
+      tnssmart harbor blvd destin fl
 
   - name: "Dewey Destin Seafood Restaurant"
     match: >
@@ -256,6 +315,11 @@ data:
     match: >
       domino'?s
     tags: ["delivery", "fast-food"]
+
+  - name: 'Dos Reales Mexican Restaurant'
+    match: >-
+      dos reales mexican
+    tags: ['restaurant']
 
   - name: "Dumpling Noodle BBQ"
     match: >
@@ -332,10 +396,20 @@ data:
       hooters
     tags: ["restaurant"]
 
+  - name: "Houlihan's"
+    match: >-
+      houlihan'?s
+    tags: ['restaurant']
+
   - name: "Huaraches Moroleon"
     match: >
       huaraches
     tags: ["restaurant"]
+
+  - name: 'HuHot Mongolian Grill'
+    match: >-
+      huhot mongolian grill
+    tags: ['restaurant']
 
   - name: "Huber's"
     match: >
@@ -354,10 +428,30 @@ data:
       - "delivery"
       - "fast-food"
 
+  - name: "Jimmy John's"
+    match: >-
+      jimmy john'?s
+    tags: ['fast-food']
+
+  - name: "Jupiter's At The Crossing"
+    match: >-
+      jupiter'?s at the c
+    tags: ['restaurant']
+
   - name: "Kentucky Fried Chicken"
     match: >
       \s+kfc\s+
     tags: ["fast-food"]
+
+  - name: "Krekel's Custard"
+    match: >-
+      krekel'?s
+    tags: ['fast-food']
+
+  - name: 'Lai Lai Wok'
+    match: >-
+      lai lai wok
+    tags: ['restaurant']
 
   - name: "Las Velas Mexican Restaurant"
     match: >
@@ -368,6 +462,11 @@ data:
     match: >
       li'?l porgy'?s
     tags: ["fast-food"]
+
+  - name: "Long John Silver's"
+    match: >-
+      ljs \#
+    tags: ['fast-food']
 
   - name: "Longhorn Steak House"
     match: >
@@ -404,10 +503,20 @@ data:
       mcdonald'?s
     tags: ["fast-food"]
 
+  - name: "McGuire's Irish Pub"
+    match: >-
+      mcguire'?s irish pub
+    tags: ['restaurant']
+
   - name: "Meatheads"
     match: >
       meatheads
     tags: ["fast-food"]
+
+  - name: 'MidAmerica St. Louis Airport Food'
+    match: >-
+      rps midamerica airport
+    tags: ['fast-food']
 
   - name: "Moki Sushi"
     match: >
@@ -419,10 +528,20 @@ data:
       monical'?s pizza
     tags: ["restaurant"]
 
+  - name: 'Nando Milano'
+    match: >-
+      nando milano
+    tags: ['restaurant']
+
   - name: "Niro's Gyros"
     match: >
       niro'?s gyros
     tags: ["fast-food"]
+
+  - name: "O'Charley’s Restaurant & Bar"
+    match: >-
+      o'?charley'?s
+    tags: ['restaurant']
 
   - name: "Oishi Hibachi Steak House"
     match: >
@@ -459,9 +578,14 @@ data:
       pekara
     tags: ["restaurant"]
 
+  - name: 'Perkins Restaurant & Bakery'
+    match: >-
+      perkins rest
+    tags: ['restaurant']
+
   - name: "Popeyes"
-    match: >
-      popeyes
+    match: >-
+      popeye'?s
     tags: ["fast-food"]
 
   - name: 'Reagan National Airport Consession Stand'
@@ -473,6 +597,11 @@ data:
     match: >-
       riggs beer comp
     tags: ['bar']
+
+  - name: 'Rio Bravo Mexican Restaurant'
+    match: >-
+      rio bravo mexican
+    tags: ['restaurant']
 
   - name: "Sammy's Pancake House"
     match: >
@@ -559,6 +688,11 @@ data:
       the pantry tuscola
     tags: ['fast-food']
 
+  - name: 'The Slippery Mermaid Sushi Bar'
+    match: >-
+      the slippery me
+    tags: ['restaurant']
+
   - name: "Top Food"
     match: >
       top food
@@ -568,6 +702,11 @@ data:
     match: >
       tropical smoothie
     tags: ["fast-food"]
+
+  - name: 'Villa Italian Kitchen'
+    match: >-
+      villa pizza
+    tags: ['fast-food']
 
   - name: "Watson's Shack & Rail"
     match: >
@@ -582,5 +721,5 @@ data:
   # ----- Vending Machines -----
   - name: 'Vending Machine'
     match: >-
-      (vend llc)|(snack soda vending)|(coca cola)
+      (vend llc)|(snack soda vending)|(coca cola)|(mark vend co)
     tags: ["vending-machine"]

@@ -6,6 +6,10 @@ tags:
 
 data:
   # ----- Uncategorized -----
+  - name: 'Amazon Installments Payment'
+    match: >-
+      amzn installments pmt
+
   - name: 'Amazon Prime Bill'
     match: >-
       amazon prime
@@ -17,6 +21,18 @@ data:
   - name: 'Dollar Shave Club'
     match: >-
       dollar ?shave ?club
+
+  - name: 'Google Domains'
+    match: >-
+      google ?\*domains
+
+  - name: 'Green Street Realty'
+    match: >-
+      green street rea
+
+  - name: 'Illinois Secretary of State Vehicle Registration'
+    match: >-
+      sosinternet vehicle
 
   - name: 'USAA\.com Payment'
     match: >-
@@ -68,11 +84,36 @@ data:
     tags:
       - 'medical'
 
+  - name: 'Jones Optical'
+    match: >-
+      jones optical
+    tags:
+      - 'medical'
+
+  - name: 'Restoring Balance Massage Therapy'
+    match: >-
+      restoring balan champaign
+    tags:
+      - 'medical'
+
   - name: 'University of Illinois Veterinary Teaching Hospital'
     match: >-
       u of i vet hospital
     tags:
       - 'medical'
+
+  # ---- Taxes -----
+  - name: 'IRS (Taxes)'
+    match: >-
+      ^irs$
+    tags:
+      - 'taxes'
+
+  - name: 'State of Illinois Tax Refund'
+    match: >-
+      state of ill.*tax refund
+    tags:
+      - 'taxes'
 
   # ----- Utilities -----
   - name: 'American Water (Illinois)'

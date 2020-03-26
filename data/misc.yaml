@@ -6,6 +6,18 @@ tags:
 
 data:
   # ----- Uncategorized -----
+  - name: 'Amazon Payments ?'
+    match: >-
+      amazon payments
+
+  - name: 'Bronze Giraffe Antiques'
+    match: >-
+      bronze giraffe anti
+
+  - name: 'Best Buy'
+    match: >-
+      best buy
+
   - name: "Captain Jack's Treasure"
     match: >-
       captain jack'?s treasure
@@ -18,21 +30,57 @@ data:
     match: >-
       champaign park distric
 
+  - name: 'City of Bloomington ?'
+    match: >-
+      city of bloomington
+
   - name: 'City of Urbana ?'
     match: >-
       city of urbana
+
+  - name: 'Crossroads Corner Consignment'
+    match: >-
+      crossroads corner consi
+
+  - name: 'Dandelion Vintage & Used'
+    match: >-
+      dandelion vintage
 
   - name: 'Family Dollar'
     match: >-
       family dollar
 
+  - name: 'FedEx'
+    match: >-
+      fedex
+
+  - name: 'Great Clips'
+    match: >-
+      great clips
+
   - name: 'Hansen & Co. Barber Shop'
     match: >-
       hans[eo]n & co
 
+  - name: 'Illinois Secretary of State Fee'
+    match: >-
+      ilsecofstatesfee
+
+  - name: "Macy's"
+    match: >-
+      macy'?s
+
+  - name: "Napleton's Auto Park of Urbana"
+    match: >-
+      napleton'?s auto park
+
   - name: "O'Neill Boardshorts & Clothing"
     match: >-
       oneill clothing
+
+  - name: 'OnePlus (Phones)'
+    match: >-
+      oneplus
 
   - name: 'Prairieland Feeds'
     match: >-
@@ -62,6 +110,10 @@ data:
     match: >-
       visa international transaction fee
 
+  - name: 'Walnut Street Tea Company'
+    match: >-
+      walnut street tea compa
+
   # ----- Book Stores -----
   - name: 'Barnes & Noble'
     match: >-
@@ -88,9 +140,33 @@ data:
       - 'books'
 
   # ----- Home Improvement -----
+  - name: "Contractor's Disposal"
+    match: >-
+      contractor'?s disposal
+    tags:
+      - 'home-improvement'
+
+  - name: 'Danville Gardens (Flower Shop)'
+    match: >-
+      danville gardens
+    tags:
+      - 'home-improvement'
+
+  - name: "Grizzly's Chimney Sweep"
+    match: >-
+      grizzly'?\??s
+    tags:
+      - 'home-improvement'
+
   - name: "Menard's"
     match: >-
       mnrd\-champaign
+    tags:
+      - 'home-improvement'
+
+  - name: 'Roto-Rooter (Plumber)'
+    match: >-
+      roto\-rooter
     tags:
       - 'home-improvement'
 
@@ -98,6 +174,12 @@ data:
   - name: 'Amazon.com Purchase'
     match: >-
       (amzn mktp)|(amazon\.com)
+    tags:
+      - 'online-purchases'
+
+  - name: 'Android App Purchase'
+    match: >-
+      (google \*appfour)|(google \*teslacoil)
     tags:
       - 'online-purchases'
 
@@ -122,5 +204,11 @@ data:
   - name: 'Target.com Purchase'
     match: >-
       target\.com
+    tags:
+      - 'online-purchases'
+
+  - name: 'Wikimedia Donation'
+    match: >-
+      wikimedia
     tags:
       - 'online-purchases'

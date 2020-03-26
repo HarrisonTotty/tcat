@@ -13,6 +13,11 @@ data:
       - 'festival'
 
   # ----- Indoor Activities -----
+  - name: 'Defy Gravity'
+    match: >-
+      defy gravity
+    tags: ['indoors']
+
   - name: 'Elevate Trampoline Park'
     match: >-
       elevate trampoline
@@ -34,7 +39,7 @@ data:
   # ----- Museums & Zoos -----
   - name: 'Chicago Museum of Science & Industry'
     match: >-
-      museum of scien.*chicago
+      (museum of scien.*chicago)|(msi chicago)
     tags:
       - 'indoors'
       - 'museum'

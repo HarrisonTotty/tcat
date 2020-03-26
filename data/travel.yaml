@@ -60,6 +60,13 @@ data:
       - 'parking'
 
   # ----- Transportation (Train, Bus, Flights, & Uber) -----
+  - name: 'Allegiant Air'
+    match: >-
+      alg\*air
+    tags:
+      - 'flight'
+      - 'transportation'
+
   - name: 'American Airlines'
     match: >-
       american air
@@ -103,6 +110,24 @@ data:
       - 'uber'
 
   # ----- Gas Stations -----
+  - name: 'Allen Food Mart (Gas Station)'
+    match: >-
+      allen foodmart
+    tags:
+      - 'gas'
+
+  - name: 'BP (Gas Station)'
+    match: >-
+      ^bp\#
+    tags:
+      - 'gas'
+
+  - name: "Casey's General Store (Gas Station)"
+    match: >-
+      casey'?s gen store
+    tags:
+      - 'gas'
+
   - name: 'Chevron (Gas Station)'
     match: >-
       chevron
@@ -112,6 +137,12 @@ data:
   - name: 'Circle K (Gas Station)'
     match: >-
       circle k
+    tags:
+      - 'gas'
+
+  - name: 'Discount Gas (Gas Station)'
+    match: >-
+      discount gas
     tags:
       - 'gas'
 
@@ -130,6 +161,12 @@ data:
   - name: 'Gas America (Gas Station)'
     match: >-
       gas america
+    tags:
+      - 'gas'
+
+  - name: 'Gitty Up N Go (Gas Station)'
+    match: >-
+      gitty up n go
     tags:
       - 'gas'
 
@@ -189,7 +226,7 @@ data:
 
   - name: 'Shell (Gas Station)'
     match: >-
-      shell service station
+      (shell service station)|(1406 n prospect ave)
     tags:
       - 'gas'
 
