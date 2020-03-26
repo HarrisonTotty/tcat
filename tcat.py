@@ -11,6 +11,7 @@ import datetime
 import glob
 import os
 import re
+import statistics
 import sys
 import yaml
 
@@ -156,6 +157,14 @@ def parse_csv(csv_file, bank=None, account=None):
     return parsed
 
 
+def tcoverage(transactions):
+    '''
+    Returns the percentage of transactions which have been categorized.
+    '''
+    puncat = len(tuncat(transactions)) / len(transactions)
+    return round((1 - puncat) * 100, 2)
+
+
 def tfilter(transactions, account=None, amount=None, bank=None, date=None, desc=None, name=None, tags=None):
     '''
     Filters a list of transactions according to a function filtering by:
@@ -188,6 +197,20 @@ def tfilter(transactions, account=None, amount=None, bank=None, date=None, desc=
     return filtered
 
 
+def tmean(transactions):
+    '''
+    Computes the mean of the amounts of the specified list of transactions.
+    '''
+    return statistics.mean([t['amount'] for t in transactions])
+
+
+def tmedian(transactions):
+    '''
+    Computes the median of the amounts of the specified list of transactions.
+    '''
+    return statistics.median([t['amount'] for t in transactions])
+
+
 def tmerge(*args, reverse=False):
     '''
     Merges one or more transaction lists into a single one. The result is then
@@ -217,6 +240,21 @@ def tprint(transaction, extended=False):
     print('Amount:      ' + dstr(transaction['amount']))
     print('Balance:     ' + dstr(transaction['bal']))
     print('Tags:        ' + str(transaction['tags']))
+
+
+def tstdev(transactions):
+    '''
+    Computes the standard deviation of the amounts of the specified list of
+    transactions.
+    '''
+    return statistics.stdev([t['amount'] for t in transactions])
+
+
+def tsum(transactions):
+    '''
+    Computes the sum of the amounts of the specified list of transactions.
+    '''
+    return sum([t['amount'] for t in transactions])
 
 
 def tuncat(transactions):
