@@ -197,6 +197,13 @@ def tfilter(transactions, account=None, amount=None, bank=None, date=None, desc=
     return filtered
 
 
+def tmax(transactions):
+    '''
+    Computes the maximum of the amounts of the specified list of transactions.
+    '''
+    return max([t['amount'] for t in transactions])
+
+
 def tmean(transactions):
     '''
     Computes the mean of the amounts of the specified list of transactions.
@@ -220,6 +227,13 @@ def tmerge(*args, reverse=False):
     for t in args:
         merged.extend(copy.deepcopy(t))
     return sorted(merged, key = lambda x: x['date'], reverse=reverse)
+
+
+def tmin(transactions):
+    '''
+    Computes the minimum of the amounts of the specified list of transactions.
+    '''
+    return min([t['amount'] for t in transactions])
 
 
 def tprint(transaction, extended=False):
