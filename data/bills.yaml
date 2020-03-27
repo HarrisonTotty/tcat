@@ -22,6 +22,10 @@ data:
     match: >-
       dollar ?shave ?club
 
+  - name: 'Down Payment (Home)'
+    match: >-
+      ^0000144637$
+
   - name: 'Google Domains'
     match: >-
       google ?\*domains
@@ -64,6 +68,14 @@ data:
       ^freedom$
     tags:
       - 'loans'
+      - 'mortgage'
+
+  - name: 'Prime Lending'
+    match: >-
+      primelending
+    tags:
+      - 'loans'
+      - 'mortgage'
 
   - name: 'Wofcset Auto Loan'
     match: >-

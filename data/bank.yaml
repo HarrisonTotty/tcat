@@ -26,6 +26,10 @@ data:
     match: >-
       mobile deposit
 
+  - name: 'Verify External Bank'
+    match: >-
+      microverif id
+
   # ----- Money Transfers -----
   - name: 'Transfer: Eglin FCU -> Checking'
     match: >-
@@ -54,3 +58,10 @@ data:
     tags:
       - 'xfer'
       - 'xfer-savings'
+
+  - name: "Transfer: People's National Bank -> Checking"
+    match: >-
+      alliant cu\.people'?s national bank
+    tags:
+      - 'xfer'
+      - 'xfer-checking'

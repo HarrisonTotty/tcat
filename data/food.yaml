@@ -117,6 +117,13 @@ data:
       - "delivery"
       - "restaurant"
 
+  - name: 'Spoon House (DoorDash)'
+    match: >-
+      doordash\*spoon house
+    tags:
+      - 'delivery'
+      - 'restaurant'
+
   - name: "Steak 'n Shake (DoorDash)"
     match: >
       doordash\*steak n shake
@@ -627,6 +634,11 @@ data:
     match: >
       smoky[' ]?s house
     tags: ["restaurant"]
+
+  - name: 'Smoothie King'
+    match: >-
+      smoothie king
+    tags: ['cafe']
 
   - name: 'Starbucks'
     match: >-
