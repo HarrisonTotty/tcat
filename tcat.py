@@ -217,8 +217,8 @@ def tfilter(transactions, account=None, amount=None, bank=None, date=None, desc=
         case-insensitive and will match on substring as well.
       * a date string of the form `%Y`, `%Y/%m`, or `%Y/%m/%d` for the `date`
         keyword argument.
-      * a tuple of date strings, each of the form above. These are taken to
-        constitute a range of dates. TODO implement this.
+      * a tuple of date strings for the `date` keyword argument, each of the
+        form above. These are taken to constitute a range of dates. TODO implement this.
     '''
     filtered = []
     for t in transactions:
