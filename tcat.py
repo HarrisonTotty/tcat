@@ -205,23 +205,69 @@ def tfilter(transactions, account=None, amount=None, bank=None, date=None, desc=
       * dollar amount
       * date
       * Some combination of the above (applied in that order)
+    In addition to functions/lambdas you can also specify:
+      * a string for the `account` or `bank` keyword arguments. These
+        comparisons are case-insensitive.
+      * a list of tags for the `tags` keyword argument (at least one of those
+        specified must be present for the transaction to be included).
+      * a single tag string for the `tags` keyword argument. The transaction
+        must contain the specified tag to be included.
+      * a string for the `name` keyword argument.
+      * a string for the `desc` keyword argument. This comparison is
+        case-insensitive and will match on substring as well.
+      * a date string of the form `%Y`, `%Y/%m`, or `%Y/%m/%d` for the `date`
+        keyword argument.
+      * a tuple of date strings, each of the form above. These are taken to
+        constitute a range of dates. TODO implement this.
     '''
     filtered = []
     for t in transactions:
-        if bank and not bank(t['bank']):
-            continue
-        if account and not account(t['account']):
-            continue
-        if tags and not tags(set(t['tags'])):
-            continue
-        if name and not name(t['name']):
-            continue
-        if desc and not desc(t['desc']):
-            continue
+        if bank:
+            if isinstance(bank, str):
+                if bank.lower() != t['bank'].lower():
+                    continue
+            elif not bank(t['bank']):
+                continue
+        if account:
+            if isinstance(account, str):
+                if account.lower() != t['account'].lower():
+                    continue
+            elif not account(t['account']):
+                continue
+        if tags:
+            if isinstance(tags, str):
+                if not tags in t['tags']:
+                    continue
+            elif isinstance(tags, list):
+                if not True in [(tag in t['tags']) for tag in tags]:
+                    continue
+            elif not tags(set(t['tags'])):
+                continue
+        if name:
+            if isinstance(name, str):
+                if t['name'] != name:
+                    continue
+            elif not name(t['name']):
+                continue
+        if desc:
+            if isinstance(desc, str):
+                if not desc.lower() in t['desc'].lower():
+                    continue
+            elif not desc(t['desc']):
+                continue
         if amount and not amount(t['amount']):
             continue
-        if date and not date(t['date']):
-            continue
+        if date:
+            if isinstance(date, str):
+                sd = list(map(int, date.split('/')))
+                if len(sd) >= 1 and t['date'].year != sd[0]:
+                    continue
+                if len(sd) >= 2 and t['date'].month != sd[1]:
+                    continue
+                if len(sd) >= 3 and t['date'].day != sd[2]:
+                    continue
+            elif not date(t['date']):
+                continue
         filtered.append(copy.deepcopy(t))
     return filtered
 
