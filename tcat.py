@@ -206,18 +206,18 @@ def tfilter(transactions, account=None, amount=None, bank=None, date=None, desc=
       * date
       * Some combination of the above (applied in that order)
     In addition to functions/lambdas you can also specify:
-      * a string for the `account` or `bank` keyword arguments. These
+      * A string for the `account` or `bank` keyword arguments. These
         comparisons are case-insensitive.
-      * a list of tags for the `tags` keyword argument (at least one of those
+      * A list of tags for the `tags` keyword argument (at least one of those
         specified must be present for the transaction to be included).
-      * a single tag string for the `tags` keyword argument. The transaction
+      * A single tag string for the `tags` keyword argument. The transaction
         must contain the specified tag to be included.
-      * a string for the `name` keyword argument.
-      * a string for the `desc` keyword argument. This comparison is
+      * A string for the `name` keyword argument.
+      * A string for the `desc` keyword argument. This comparison is
         case-insensitive and will match on substring as well.
-      * a date string of the form `%Y`, `%Y/%m`, or `%Y/%m/%d` for the `date`
+      * A date string of the form `%Y`, `%Y/%m`, or `%Y/%m/%d` for the `date`
         keyword argument.
-      * a tuple of date strings for the `date` keyword argument, each of the
+      * A tuple of date strings for the `date` keyword argument, each of the
         form above. These are taken to constitute a range of dates. TODO implement this.
     '''
     filtered = []
