@@ -88,9 +88,11 @@ class Categorizer:
             cat['tags'] = list(set(cat['tags']))
         return cat
 
-    def categorize_transactions(self, transactions):
+    def categorize_transactions(self, transactions, macro=True, micro=True):
         '''
-        Categorizes a list of transaction dictionaries.
+        Categorizes a list of transaction dictionaries. Also has the ability of
+        categorizing any transaction with an absolute value <= $1 as a micro
+        transaction and any >= $1000 as a macro transaction.
         '''
         cat = []
         for t in transactions:
@@ -98,6 +100,14 @@ class Categorizer:
             if cdesc := self.categorize(t['desc']):
                 tc['name'] = cdesc['name']
                 tc['tags'] = cdesc['tags']
+            if macro and abs(t['amount']) >= 1000:
+                if not 'name' in tc:
+                    tc['name'] = 'Macrotransaction'
+                tc['tags'].append('macro')
+            if micro and abs(t['amount']) <= 1:
+                if not 'name' in tc:
+                    tc['name'] = 'Microtransaction'
+                tc['tags'].append('micro')
             cat.append(tc)
         return cat
 
@@ -215,10 +225,12 @@ def tfilter(transactions, account=None, amount=None, bank=None, date=None, desc=
       * A string for the `name` keyword argument.
       * A string for the `desc` keyword argument. This comparison is
         case-insensitive and will match on substring as well.
+      * A tuple of integers or floats for the `amount` keyword argument. These
+        are taken to constitute a range of amounts (inclusive).
       * A date string of the form `%Y`, `%Y/%m`, or `%Y/%m/%d` for the `date`
         keyword argument.
       * A tuple of date strings for the `date` keyword argument, each of the
-        form above. These are taken to constitute a range of dates. TODO implement this.
+        form above. These are taken to constitute a range of dates (inclusive).
     '''
     filtered = []
     for t in transactions:
@@ -244,6 +256,8 @@ def tfilter(transactions, account=None, amount=None, bank=None, date=None, desc=
             elif not tags(set(t['tags'])):
                 continue
         if name:
+            if not 'name' in t:
+                continue
             if isinstance(name, str):
                 if t['name'] != name:
                     continue
@@ -255,8 +269,12 @@ def tfilter(transactions, account=None, amount=None, bank=None, date=None, desc=
                     continue
             elif not desc(t['desc']):
                 continue
-        if amount and not amount(t['amount']):
-            continue
+        if amount:
+            if isinstance(amount, tuple):
+                if t['amount'] < amount[0] or t['amount'] > amount[1]:
+                    continue
+            elif not amount(t['amount']):
+                continue
         if date:
             if isinstance(date, str):
                 sd = list(map(int, date.split('/')))
@@ -265,6 +283,15 @@ def tfilter(transactions, account=None, amount=None, bank=None, date=None, desc=
                 if len(sd) >= 2 and t['date'].month != sd[1]:
                     continue
                 if len(sd) >= 3 and t['date'].day != sd[2]:
+                    continue
+            elif isinstance(date, tuple):
+                sd1 = list(map(int, date[0].split('/')))
+                while len(sd1) < 3: sd1.append(0)
+                sd2 = list(map(int, date[1].split('/')))
+                while len(sd2) < 3: sd2.append(0)
+                lowerbound = datetime.datetime(*sd1)
+                upperbound = datetime.datetime(*sd2)
+                if t['date'] < lowerbound or t['date'] > upperbound:
                     continue
             elif not date(t['date']):
                 continue
@@ -283,14 +310,14 @@ def tmean(transactions):
     '''
     Computes the mean of the amounts of the specified list of transactions.
     '''
-    return statistics.mean([t['amount'] for t in transactions])
+    return round(statistics.mean([t['amount'] for t in transactions]), 2)
 
 
 def tmedian(transactions):
     '''
     Computes the median of the amounts of the specified list of transactions.
     '''
-    return statistics.median([t['amount'] for t in transactions])
+    return round(statistics.median([t['amount'] for t in transactions]), 2)
 
 
 def tmerge(*args, reverse=False):
@@ -336,14 +363,14 @@ def tstdev(transactions):
     Computes the standard deviation of the amounts of the specified list of
     transactions.
     '''
-    return statistics.stdev([t['amount'] for t in transactions])
+    return round(statistics.stdev([t['amount'] for t in transactions]), 2)
 
 
 def tsum(transactions):
     '''
     Computes the sum of the amounts of the specified list of transactions.
     '''
-    return sum([t['amount'] for t in transactions])
+    return round(sum([t['amount'] for t in transactions]), 2)
 
 
 def tuncat(transactions):
