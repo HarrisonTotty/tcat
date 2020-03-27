@@ -143,7 +143,7 @@ def parse_csv(csv_file, bank=None, account=None):
         csv_files = glob.glob(os.path.join(cf, '*.csv'))
         if not csv_files:
             raise Exception('specified csv directory does not contain any data files')
-        return tmerge([parse_csv(f) for f in csv_files])
+        return tmerge(*[parse_csv(f) for f in csv_files])
     if not os.path.isfile(cf):
         raise Exception('specified csv file does not exist')
     cname = os.path.basename(csv_file).split('.', 1)[0]
@@ -333,12 +333,13 @@ def tmedian(transactions):
 def tmerge(*args, reverse=False):
     '''
     Merges one or more transaction lists into a single one. The result is then
-    sorted by transaction date.
+    sorted by transaction date with the most recent entries at the beginning of
+    the list by default.
     '''
     merged = []
     for t in args:
         merged.extend(copy.deepcopy(t))
-    return sorted(merged, key = lambda x: x['date'], reverse=reverse)
+    return tsort(merged, reverse=reverse)
 
 
 def tmin(transactions):
@@ -366,6 +367,28 @@ def tprint(transaction, extended=False):
     print('Amount:      ' + dstr(transaction['amount']))
     print('Balance:     ' + dstr(transaction['bal']))
     print('Tags:        ' + str(transaction['tags']))
+
+
+def tsort(transactions, key='date', reverse=False):
+    '''
+    Sorts the specified list of transactions according to a certain "key",
+    optionally reversing the default sort order.
+
+    The `key` parameter may be specified as:
+      * A function/lambda on each transaction option.
+      * A string corresponding to the name of a key within each transaction (for
+        example: `date`).
+
+    Note that when sorting by the `date` key, the most recent dates will be
+    moved to the beginning of the list.
+    '''
+    if isinstance(key, str):
+        if key == 'date':
+            return sorted(transactions, key = lambda x: x['date'], reverse = not reverse)
+        else:
+            return sorted(transactions, key = lambda x: x[key], reverse = reverse)
+    else:
+        return sorted(transactions, key=key, reverse=reverse)
 
 
 def tstdev(transactions):
