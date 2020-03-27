@@ -133,9 +133,19 @@ def parse_csv(csv_file, bank=None, account=None):
     account the file represents. If the bank and account are not specified, it
     is constructed from the file name assuming the format: BANK-ACCOUNT.csv
 
+    Additionally, a directory may instead be provided, in which all `.csv`
+    files within it will be parsed and then merged.
+
     The resulting transactions are not automatically categorized.
     '''
     cf = os.path.expanduser(csv_file)
+    if os.path.isdir(cf):
+        csv_files = glob.glob(os.path.join(cf, '*.csv'))
+        if not csv_files:
+            raise Exception('specified csv directory does not contain any data files')
+        return tmerge([parse_csv(f) for f in csv_files])
+    if not os.path.isfile(cf):
+        raise Exception('specified csv file does not exist')
     cname = os.path.basename(csv_file).split('.', 1)[0]
     if '-' in cname:
         cname_split = cname.split('-', 1)
