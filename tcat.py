@@ -10,6 +10,8 @@ import csv
 import datetime
 import glob
 import os
+import plotly.figure_factory as ff
+import plotly.graph_objects as go
 import re
 import statistics
 import sys
@@ -174,6 +176,17 @@ def parse_csv(csv_file, bank=None, account=None):
                 'desc': d['Description'].replace('&#39;', "'").replace('&amp;', '&'),
                 'tags': []
             })
+    elif the_bank.lower() == 'eglin':
+        for d in init_parse:
+            parsed.append({
+                'account': the_account,
+                'amount': float(d['Amount']),
+                'bal': float(d['Balance']),
+                'bank': the_bank,
+                'date': datetime.datetime.strptime(d['Date'], '%m/%d/%Y'),
+                'desc': d['Description'],
+                'tags': []
+            })
     return parsed
 
 
@@ -237,11 +250,14 @@ def tfilter(transactions, account=None, amount=None, bank=None, date=None, desc=
         case-insensitive and will match on substring as well.
       * A tuple of integers or floats for the `amount` keyword argument. These
         are taken to constitute a range of amounts (inclusive).
+      * An integer for the `date` keyword argument, indicating to filter by the
+        `n` most recent days.
       * A date string of the form `%Y`, `%Y/%m`, or `%Y/%m/%d` for the `date`
         keyword argument.
       * A tuple of date strings for the `date` keyword argument, each of the
         form above. These are taken to constitute a range of dates (inclusive).
     '''
+    most_recent_date = max([t['date'] for t in transactions])
     filtered = []
     for t in transactions:
         if bank:
@@ -286,7 +302,10 @@ def tfilter(transactions, account=None, amount=None, bank=None, date=None, desc=
             elif not amount(t['amount']):
                 continue
         if date:
-            if isinstance(date, str):
+            if isinstance(date, int):
+                if (most_recent_date - t['date']).days > date:
+                    continue
+            elif isinstance(date, str):
                 sd = list(map(int, date.split('/')))
                 if len(sd) >= 1 and t['date'].year != sd[0]:
                     continue
@@ -296,9 +315,9 @@ def tfilter(transactions, account=None, amount=None, bank=None, date=None, desc=
                     continue
             elif isinstance(date, tuple):
                 sd1 = list(map(int, date[0].split('/')))
-                while len(sd1) < 3: sd1.append(0)
+                while len(sd1) < 3: sd1.append(1)
                 sd2 = list(map(int, date[1].split('/')))
-                while len(sd2) < 3: sd2.append(0)
+                while len(sd2) < 3: sd2.append(1)
                 lowerbound = datetime.datetime(*sd1)
                 upperbound = datetime.datetime(*sd2)
                 if t['date'] < lowerbound or t['date'] > upperbound:
@@ -307,6 +326,49 @@ def tfilter(transactions, account=None, amount=None, bank=None, date=None, desc=
                 continue
         filtered.append(copy.deepcopy(t))
     return filtered
+
+
+def tgroup(transactions, by='date-weekly'):
+    '''
+    Groups the specified list of transactions according to a quantifier.
+    '''
+    if 'date' in by:
+        sortedt = tsort(transactions, reverse=True)
+    elif by == 'tags':
+        sortedt = copy.deepcopy(transactions)
+        for t in sortedt:
+            t['tags'] = sorted(t['tags'])
+        sortedt = tsort(sortedt, key='tags')
+    groups = [[]]
+    gi = 0
+    for i, t in enumerate(sortedt):
+        if i == 0:
+            groups[0].append(sortedt[0])
+            continue
+        prev = sortedt[i - 1]
+        if by == 'date-daily':
+            if t['date'] == prev['date']:
+                groups[gi].append(sortedt[i])
+                continue
+        elif by == 'date-weekly':
+            if t['date'].isocalendar()[1] == prev['date'].isocalendar()[1]:
+                groups[gi].append(sortedt[i])
+                continue
+        elif by == 'date-monthly':
+            if t['date'].year == prev['date'].year and t['date'].month == prev['date'].month:
+                groups[gi].append(sortedt[i])
+                continue
+        elif by == 'date-yearly':
+            if t['date'].year == prev['date'].year:
+                groups[gi].append(sortedt[i])
+                continue
+        elif by == 'tags':
+            if t['tags'] == prev['tags']:
+                groups[gi].append(sortedt[i])
+                continue
+        groups.append([sortedt[i]])
+        gi += 1
+    return groups
 
 
 def tmax(transactions):
@@ -349,11 +411,248 @@ def tmin(transactions):
     return min([t['amount'] for t in transactions])
 
 
+def tplot(transactions, absval=False, key='bal', rolling=0, slider=False, statistic='median', title=None):
+    '''
+    Produces a graphical plot of the specified list of transactions. By default,
+    this function will produce a line plot of the balance over time. Each
+    bank+account combination will be given its own line.
+    '''
+    fig = go.Figure()
+    if statistic == 'mean':
+        statfunc = statistics.mean
+    elif statistic == 'median':
+        statfunc = statistics.median
+    elif statistic == 'stdev':
+        statfunc = statistics.stdev
+    elif statistic == 'total' or statistic == 'sum':
+        statfunc = sum
+    banks = set([t['bank'] for t in transactions])
+    for bank in banks:
+        bt = tfilter(transactions, bank=bank)
+        accounts = set([t['account'] for t in bt])
+        for account in accounts:
+            at = tfilter(bt, account=account)
+            if len(banks) == 1 and len(accounts) == 1:
+                tname = None
+            elif len(banks) == 1 and len(accounts) > 1:
+                tname = account
+            else:
+                tname = '{b} ({a})'.format(b=bank, a=account)
+            dates = sorted(list(set([t['date'] for t in at])))
+            balances = []
+            for date in dates:
+                if rolling:
+                    val = statfunc([t[key] for t in at if (date - t['date']).days >= 0 and (date - t['date']).days <= rolling])
+                    balances.append(abs(val) if absval else val)
+                else:
+                    val = statfunc([t[key] for t in at if t['date'] == date])
+                    balances.append(abs(val) if absval else val)
+            fig.add_trace(go.Scatter(
+                x = dates,
+                y = balances,
+                mode = 'lines+markers',
+                name = tname,
+            ))
+    if key == 'amount':
+        yt = 'Transaction Amount ($)'
+    elif key == 'bal':
+        yt = 'Account Balance ($)'
+    if statistic == 'mean':
+        yt = 'Mean ' + yt
+    elif statistic == 'median':
+        yt = 'Median ' + yt
+    elif statistic == 'stdev':
+        yt = 'Standard Deviation of ' + yt
+    elif statistic in ['sum', 'total']:
+        yt = 'Total ' + yt
+    if rolling:
+        yt = 'Rolling ' + yt
+    fig.update_layout(
+        title = title,
+        xaxis_rangeslider_visible = slider,
+        xaxis_title = 'Date',
+        yaxis_title = yt
+    )
+    return fig
+
+
+def tplot_candle(transactions, absval=False, dt='day', key='bal', log=False, statistic='median', title=None):
+    '''
+    Produces a candlestick plot of the specified list of transactions.
+    '''
+    if statistic == 'median':
+        statfunc = statistics.median
+    else:
+        statfunc = statistics.mean
+    fig = go.Figure()
+    dopen = []
+    dhigh = []
+    dlow = []
+    dclose = []
+    dates = sorted(list(set([t['date'] for t in transactions])))
+    for d in dates:
+        data = [t[key] for t in transactions if t['date'] == d]
+        if absval:
+            data = list(map(abs, data))
+        dhigh.append(max(data))
+        dlow.append(min(data))
+        if len(data) == 1:
+            dopen.append(data[0])
+            dclose.append(data[0])
+        elif len(data) == 2:
+            dopen.append(max(data))
+            dclose.append(min(data))
+        else:
+            data_avg = statfunc(data)
+            data_stdev = statistics.stdev(data)
+            dopen.append(data_avg + (data_stdev / 2))
+            dclose.append(data_avg - (data_stdev / 2))
+    fig.add_trace(go.Candlestick(
+        x = dates,
+        high = dhigh,
+        open = dopen,
+        close = dclose,
+        low = dlow
+    ))
+    if key == 'amount':
+        yt = 'Transaction Amount ($)'
+    elif key == 'bal':
+        yt = 'Account Balance ($)'
+    fig.update_layout(
+        title = title,
+        xaxis_title = 'Date',
+        yaxis_title = yt,
+        yaxis_type = 'log' if log else 'linear'
+    )
+    return fig
+
+
+def tplot_tagdist(transactions, absval=False, bin_size=2, ftags=None, log=False, title='Transaction Tag Amount Distribution'):
+    '''
+    Plots the amount distribution of each tag in the specified list of
+    transactions.
+    '''
+    hist_data = []
+    all_tags = tags(transactions)
+    filtered_tags= []
+    for tag in all_tags:
+        if ftags and not tag in ftags:
+            continue
+        with_tag = [t['amount'] for t in tfilter(transactions, tags=tag)]
+        if absval:
+            with_tag = list(map(abs, with_tag))
+        if len(with_tag) > 1:
+            filtered_tags.append(tag)
+            hist_data.append(with_tag)
+    fig = ff.create_distplot(
+        hist_data,
+        filtered_tags,
+        bin_size = bin_size,
+        curve_type = 'normal'
+    )
+    fig.update_layout(
+        title = title,
+        xaxis_title = 'Transaction Amount ($)',
+        xaxis_type = 'log' if log else 'linear',
+        yaxis_title = 'Proportion'
+    )
+    return fig
+
+
+def tplot_tagpie(transactions, ftags=None, statistic='total', title=None):
+    '''
+    Creates a pie chart of the tags associated with the specified list of
+    transactions.
+    '''
+    if statistic == 'mean':
+        statfunc = statistics.mean
+    elif statistic == 'median':
+        statfunc = statistics.median
+    elif statistic == 'stdev':
+        statfunc = statistics.stdev
+    elif statistic in ['sum', 'total']:
+        statfunc = sum
+    all_tags = tags(transactions)
+    filtered_tags = []
+    pie_data = []
+    for tag in all_tags:
+        if ftags and not tag in ftags:
+            continue
+        with_tag = [abs(t['amount']) for t in tfilter(transactions, tags=tag)]
+        filtered_tags.append(tag)
+        pie_data.append(statfunc(with_tag))
+    fig = go.Figure(data=[go.Pie(
+        labels = filtered_tags,
+        values = pie_data
+    )])
+    fig.update_layout(title=title)
+    return fig
+
+
 def tprint(transaction, extended=False):
     '''
     Prints the specified transaction, but by default only the most useful
     information.
+
+    In addition, if a list of transactions is specified, then they are printed
+    with one transaction per line.
     '''
+    if isinstance(transaction, list):
+        max_account = max(map(len, [t['account'] for t in transaction]))
+        max_amount = max(map(len, [dstr(t['amount']) for t in transaction]))
+        max_bal = max(map(len, [dstr(t['bal']) for t in transaction]))
+        max_bank = max(map(len, [t['bank'] for t in transaction]))
+        max_desc = max(map(len, [t['desc'] for t in transaction]))
+        has_names = ['name' in t for t in transaction]
+        if True in has_names:
+            max_name = max(map(len, [t['name'] for t in transaction if 'name' in t]))
+        else:
+            max_name = 0
+        if not False in has_names:
+            max_namedesc = max_name
+        elif max_name >= max_desc:
+            max_namedesc = max_name
+        else:
+            max_namedesc = max_desc
+        header_line = 'DATE        '
+        if extended:
+            header_line += 'BANK' + (' ' * (max_bank - 4)) + '  '
+            header_line += 'ACCOUNT' + (' ' * (max_account - 7)) + '  '
+        if max_namedesc < 16:
+            header_line += 'NAME/DESC' + (' ' * (max_namedesc - 9)) + '  '
+        else:
+            header_line += 'NAME/DESCRIPTION' + (' ' * (max_namedesc - 16)) + '  '
+        if max_amount < 6:
+            header_line += 'AMT' + (' ' * (max_amount - 3)) + '  '
+        else:
+            header_line += 'AMOUNT' + (' ' * (max_amount - 6)) + '  '
+        if extended:
+            if max_bal < 7:
+                header_line += 'BAL' + (' ' * (max_bal - 3))
+            else:
+                header_line += 'BALANCE' + (' ' * (max_bal - 7))
+        print(header_line)
+        print('-' * len(header_line))
+        for t in transaction:
+            pamount = dstr(t['amount'])
+            pname = t['name'] if 'name' in t else t['desc']
+            if extended:
+                pt = '{date}  {bank}  {account}  {name}  {amount}\t{bal}'.format(
+                    date = t['date'].strftime('%Y/%m/%d'),
+                    bank = t['bank'] + (' ' * (max_bank - len(t['bank']))),
+                    account = t['account'] + (' ' * (max_account - len(t['account']))),
+                    name = pname + (' ' * (max_namedesc - len(pname))),
+                    amount = pamount + (' ' * (max_amount - len(pamount))),
+                    bal = dstr(t['bal'])
+                )
+            else:
+                pt = '{date}  {name}  {amount}'.format(
+                    date = t['date'].strftime('%Y/%m/%d'),
+                    name = pname + (' ' * (max_namedesc - len(pname))),
+                    amount = pamount + (' ' * (max_amount - len(pamount)))
+                )
+            print(pt)
+        return
     if extended:
         print('Bank:        ' + transaction['bank'])
         print('Account:     ' + transaction['account'])
