@@ -7,7 +7,7 @@ tags:
 data:
   - name: 'CVS Pharmacy'
     match: >-
-      cvs/pharmacy
+      cvs/pharm(acy)?
     tags:
       - 'pharmacy'
 

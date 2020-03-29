@@ -10,13 +10,29 @@ data:
     match: >-
       amazon payments
 
-  - name: 'Bronze Giraffe Antiques'
+  - name: 'American Cancer Society Donation'
     match: >-
-      bronze giraffe anti
+      am(erican)? cancer soc
+
+  - name: 'Asbestos Certification'
+    match: >-
+      iepa as?bestos
+
+  - name: 'AutoZone Auto Parts'
+    match: >-
+      autozone
 
   - name: 'Best Buy'
     match: >-
       best buy
+
+  - name: 'Bed Bath & Beyond'
+    match: >-
+      bed bath & beyond
+
+  - name: 'Bronze Giraffe Antiques'
+    match: >-
+      bronze giraffe anti
 
   - name: "Captain Jack's Treasure"
     match: >-
@@ -28,7 +44,7 @@ data:
    
   - name: 'Champaign Park District'
     match: >-
-      champaign park distric
+      champaign park dist
 
   - name: 'City of Bloomington ?'
     match: >-
@@ -37,6 +53,12 @@ data:
   - name: 'City of Urbana ?'
     match: >-
       city of urbana
+
+  - name: 'Credit Card Payment'
+    match: >-
+      cardmember serv
+    tags:
+      - 'credit-card'
 
   - name: 'Crossroads Corner Consignment'
     match: >-
@@ -62,6 +84,10 @@ data:
     match: >-
       hans[eo]n & co
 
+  - name: 'Illinois Secretary of State'
+    match: >-
+      ilsecretaryofst
+
   - name: 'Illinois Secretary of State Fee'
     match: >-
       ilsecofstatesfee
@@ -70,9 +96,17 @@ data:
     match: >-
       macy'?s
 
+  - name: 'Minute Key'
+    match: >-
+      minute key
+
   - name: "Napleton's Auto Park of Urbana"
     match: >-
       napleton'?s auto park
+
+  - name: 'Nest Labs (Themostat)'
+    match: >-
+      nest labs
 
   - name: "O'Neill Boardshorts & Clothing"
     match: >-
@@ -90,6 +124,10 @@ data:
     match: >-
       rainstorm
 
+  - name: 'Speed Lube'
+    match: >-
+      speed lube
+
   - name: 'SQ Champaign County'
     match: >-
       sq \*champaign count
@@ -97,6 +135,22 @@ data:
   - name: 'Starcrest Cleaners'
     match: >-
       starcrest cleaners
+
+  - name: 'Stripe Transfer'
+    match: >-
+      stripe transfer
+
+  - name: 'Target'
+    match: >-
+      ^target
+
+  - name: 'Titan Games'
+    match: >-
+      titan games
+
+  - name: 'TJ Maxx'
+    match: >-
+      tj ?maxx
 
   - name: 'University of Illinois'
     match: >-
@@ -113,6 +167,10 @@ data:
   - name: 'Walnut Street Tea Company'
     match: >-
       walnut street tea compa
+
+  - name: 'Wedding Registry Donation'
+    match: >-
+      (knot wedding registry)|(honeyfund heather)
 
   # ----- Book Stores -----
   - name: 'Barnes & Noble'
@@ -158,15 +216,27 @@ data:
     tags:
       - 'home-improvement'
 
+  - name: "Lowe's"
+    match: >-
+      lowe'?s
+    tags:
+      - 'home-improvement'
+
   - name: "Menard's"
     match: >-
-      mnrd\-champaign
+      mnrd\-cham(paign)?
     tags:
       - 'home-improvement'
 
   - name: 'Roto-Rooter (Plumber)'
     match: >-
       roto\-rooter
+    tags:
+      - 'home-improvement'
+
+  - name: 'The Home Depot'
+    match: >-
+      the home depot
     tags:
       - 'home-improvement'
 
@@ -195,6 +265,13 @@ data:
     tags:
       - 'online-purchases'
 
+  - name: 'No Starch Press'
+    match: >-
+      no starch press
+    tags:
+      - 'books'
+      - 'online-purchases'
+
   - name: 'Paypal'
     match: >-
       paypal
@@ -204,6 +281,12 @@ data:
   - name: 'Target.com Purchase'
     match: >-
       target\.com
+    tags:
+      - 'online-purchases'
+
+  - name: 'PediaPress (Wikibooks) Purchase'
+    match: >-
+      pediapress
     tags:
       - 'online-purchases'
 

@@ -6,9 +6,9 @@ tags:
 
 data:
   # ----- Uncategorized -----
-  - name: '% APY Earned'
+  - name: 'Annual Percentage Yield Earned'
     match: >-
-      apy earned
+      (apy earned)|(annual percentage yield)
 
   - name: 'ATM Rebate'
     match: >-
@@ -16,11 +16,15 @@ data:
 
   - name: 'ATM Withdrawal'
     match: >-
-      (cardtronics ccsb)|(first mid bank)
+      (cardtronics ccsb)|(first mid bank)|(\#\d+ university of illinois co)
 
   - name: 'Check Deposit'
     match: >-
       ^check \#
+
+  - name: 'Deposit'
+    match: >-
+      ^deposit$
 
   - name: 'Mobile Deposit'
     match: >-
@@ -31,16 +35,34 @@ data:
       microverif id
 
   # ----- Money Transfers -----
+  - name: 'Transfer'
+    match: >-
+      wire xfer
+    tags:
+      - 'xfer'
+
   - name: 'Transfer: Eglin FCU -> Checking'
     match: >-
       alliant cu\.eglin federal
     tags:
       - 'xfer'
       - 'xfer-checking'
- 
+
+  - name: 'Transfer: From Checking'
+    match: >-
+      (from share 40)
+    tags:
+      - 'xfer'
+
+  - name: 'Transfer: From John Totty'
+    match: >-
+      from john g totty
+    tags:
+      - 'xfer'
+
   - name: 'Transfer: Checking -> Savings'
     match: >-
-      to share 01
+      (to share 01)
     tags:
       - 'xfer'
       - 'xfer-savings'

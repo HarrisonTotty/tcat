@@ -7,10 +7,24 @@ data:
   # ----- Grubhub & Door-Dash Varients -----
   - name: "Ambar India (Grubhub)"
     match: >
-      grubhubambarindia
+      grubhub\*?ambarindia
     tags:
       - "delivery"
       - "restaurant"
+
+  - name: 'Amaravati Indian Royal Cuisine (Grubhub)'
+    match: >-
+      grubhubamaravati
+    tags:
+      - 'delivery'
+      - 'restaurant'
+
+  - name: "Auntie Anne's (DoorDash)"
+    match: >-
+      doordash\*auntie ann
+    tags:
+      - "delivery"
+      - "fast-food"
 
   - name: "Auntie Anne's (Grubhub)"
     match: >
@@ -18,6 +32,13 @@ data:
     tags:
       - "delivery"
       - "fast-food"
+
+  - name: "Bobo's Barbecue (DoorDash)"
+    match: >-
+      doordash\*bobo'?s bbq
+    tags:
+      - 'delivery'
+      - 'restaurant'
 
   - name: "Buffalo Wild Wings (DoorDash)"
     match: >
@@ -54,6 +75,13 @@ data:
       - "delivery"
       - "restaurant"
 
+  - name: 'DP Dough (Grubhub)'
+    match: >-
+      grubhubdpdough
+    tags:
+      - 'delivery'
+      - 'fast-food'
+
   - name: "El Toro Mexican Restaurant (DoorDash)"
     match: >
       doordash\*el toro
@@ -67,6 +95,13 @@ data:
     tags:
       - "delivery"
       - "restaurant"
+
+  - name: 'Fire House Subs (Grubhub)'
+    match: >-
+      grubhubfirehousesub
+    tags:
+      - 'delivery'
+      - 'fast-food'
 
   - name: "Hooters (DoorDash)"
     match: >
@@ -82,6 +117,20 @@ data:
       - "delivery"
       - "fast-food"
 
+  - name: 'Kohinoor Indian Restaurant and Lounge (Grubhub)'
+    match: >-
+      grubhubkohinoor
+    tags:
+      - 'delivery'
+      - 'restaurant'
+
+  - name: 'Lai Lai Wok (DoorDash)'
+    match: >-
+      doordash\*lai lai
+    tags:
+      - 'delivery'
+      - 'restaurant'
+
   - name: "Long John Silver's (DoorDash)"
     match: >
       doordash\*long john
@@ -89,12 +138,40 @@ data:
       - "delivery"
       - "fast-food"
 
+  - name: "Manolo's Pizza & Empanadas (Grubhub)"
+    match: >-
+      grubhubmanolos
+    tags:
+      - 'delivery'
+      - 'fast-food'
+
+  - name: "Manzella's Italian Patio (DoorDash)"
+    match: >-
+      doordash\*manzellas
+    tags:
+      - 'delivery'
+      - 'restaurant'
+
+  - name: "Manzella's Italian Patio (Gubhub)"
+    match: >-
+      grubhubmanzellas
+    tags:
+      - 'delivery'
+      - 'restaurant'
+
   - name: "Meatheads (Grubhub)"
     match: >
       grubhubmeatheads
     tags:
       - "delivery"
       - "fast-food"
+
+  - name: 'Ming Garden (Grubhub)'
+    match: >-
+      grubhubminggarden
+    tags:
+      - 'delivery'
+      - 'fast-food'
 
   - name: "Oishi Hibachi Steak House (Grubhub)"
     match: >
@@ -110,9 +187,16 @@ data:
       - "delivery"
       - "fast-food"
 
+  - name: "Rosati's Pizza (Grubhub)"
+    match: >-
+      grubhubrosatispizza
+    tags:
+      - 'delivery'
+      - 'fast-food'
+
   - name: "Smoky's House BBQ (Grubhub)"
     match: >
-      grubhubsmokyshousebbq
+      grubhubsmokyshouse
     tags:
       - "delivery"
       - "restaurant"
@@ -145,9 +229,23 @@ data:
       - "delivery"
       - "restaurant"
 
+  - name: "Wingin Out (DoorDash)"
+    match: >
+      doordash\*wingin out
+    tags:
+      - "delivery"
+      - "fast-food"
+
   - name: "Wingin Out (Grubhub)"
     match: >
       grubhubwinginout
+    tags:
+      - "delivery"
+      - "fast-food"
+
+  - name: "Wing Stop (Grubhub)"
+    match: >
+      grubhubwingstop
     tags:
       - "delivery"
       - "fast-food"
@@ -173,10 +271,15 @@ data:
     match: >
       applebee'?s
     tags: ["restaurant"]
+
+  - name: "Auntie Anne's"
+    match: >-
+      auntie anne'?s
+    tags: ['fast-food']
    
   - name: "Baxter's American Grill"
     match: >
-      baxter'?s
+      baxter[ ']?s
     tags: ["restaurant"]
 
   - name: 'Bayern Stube'
@@ -188,6 +291,11 @@ data:
     match: >-
       bentley['\`]?s pub
     tags: ['bar']
+
+  - name: 'Best Wok'
+    match: >-
+      best wok
+    tags: ['fast-food']
 
   - name: "Biaggi's Ristorante Italiano"
     match: >-
@@ -239,6 +347,11 @@ data:
       carving room
     tags: ["restaurant"]
 
+  - name: 'Castle Finn Vinyard & Winery'
+    match: >-
+      castle finn winery
+    tags: ['bar']
+
   - name: "Champaign Public Library Cafe"
     match: >
       cafe at the library
@@ -286,7 +399,7 @@ data:
 
   - name: "Cracker Barrel"
     match: >
-      cracker barrel
+      cracker b
     tags: ["restaurant"]
 
   - name: "Crane Alley"
@@ -358,6 +471,11 @@ data:
       el toro
     tags: ["restaurant"]
 
+  - name: 'Espresso Royale'
+    match: >-
+      espresso ro
+    tags: ['cafe']
+
   - name: "Esquire Lounge"
     match: >
       esquire lounge
@@ -393,6 +511,11 @@ data:
       golden harbor
     tags: ["restaurant"]
 
+  - name: 'Green Jade'
+    match: >-
+      green jade
+    tags: ['fast-food']
+
   - name: "Happy Donuts & Breakfast"
     match: >
       happy donuts
@@ -415,7 +538,7 @@ data:
 
   - name: 'HuHot Mongolian Grill'
     match: >-
-      huhot mongolian grill
+      huhot mongolian
     tags: ['restaurant']
 
   - name: "Huber's"
@@ -525,6 +648,11 @@ data:
       rps midamerica airport
     tags: ['fast-food']
 
+  - name: "Moe's Southwest Grill"
+    match: >-
+      moe'?s (sw|southwest) grill
+    tags: ['fast-food']
+
   - name: "Moki Sushi"
     match: >
       moki sushi
@@ -595,6 +723,11 @@ data:
       popeye'?s
     tags: ["fast-food"]
 
+  - name: "Portillo's Hot Dogs"
+    match: >-
+      portillo'?s hot dogs
+    tags: ['restaurant']
+
   - name: 'Reagan National Airport Consession Stand'
     match: >-
       gab term b dca
@@ -642,7 +775,7 @@ data:
 
   - name: 'Starbucks'
     match: >-
-      starbucks
+      (starbucks)|(illini union starbu)
     tags: ['cafe']
 
   - name: "Steak 'n Shake"
@@ -685,6 +818,11 @@ data:
       blind pig
     tags: ["bar"]
 
+  - name: 'The Bread Company'
+    match: >-
+      the bread company
+    tags: ['restaurant']
+
   - name: "The Clark Bar"
     match: >
       clark bar
@@ -721,8 +859,8 @@ data:
     tags: ['fast-food']
 
   - name: "Watson's Shack & Rail"
-    match: >
-      watson'?s shack & rail
+    match: >-
+      watson'?s shack & r
     tags: ["restaurant"]
 
   - name: "Wendy's"
@@ -733,5 +871,5 @@ data:
   # ----- Vending Machines -----
   - name: 'Vending Machine'
     match: >-
-      (vend llc)|(snack soda vending)|(coca cola)|(mark vend co)
+      (vend llc)|(snack soda vending)|(coca cola)|(mark vend co)|(illini union quad s)
     tags: ["vending-machine"]

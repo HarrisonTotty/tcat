@@ -30,6 +30,20 @@ data:
     tags:
       - 'indoors'
 
+  - name: 'Skateland (Savoy)'
+    match: >-
+      skateland savoy
+    tags:
+      - 'indoors'
+
+  - name: 'Star Karaoke'
+    match: >-
+      star karaoke
+    tags:
+      - 'food'
+      - 'indoors'
+      - 'restaurant'
+
   - name: 'The Ratchet Hatchet (Axe Throwing)'
     match: >-
       the ratchet hat
@@ -43,6 +57,13 @@ data:
     tags:
       - 'indoors'
       - 'museum'
+
+  - name: 'Prairie Fruits Farm & Creamery (Goats)'
+    match: >-
+      prairie fru champaign
+    tags:
+      - 'outdoors'
+      - 'zoo'
 
   - name: 'Shedd Aquarium (Chicago)'
     match: >-
@@ -74,6 +95,12 @@ data:
   - name: "Clement's Canoes"
     match: >-
       clement'?s canoes
+    tags:
+      - 'outdoors'
+
+  - name: 'Sugar Valley Canoe Trips'
+    match: >-
+      sugar valley canoe
     tags:
       - 'outdoors'
 

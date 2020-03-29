@@ -14,13 +14,9 @@ data:
     match: >-
       amazon prime
 
-  - name: 'Credit Card?'
-    match: >-
-      cardmember serv
-
   - name: 'Dollar Shave Club'
     match: >-
-      dollar ?shave ?club
+      dollar ?shave
 
   - name: 'Down Payment (Home)'
     match: >-
@@ -38,9 +34,17 @@ data:
     match: >-
       sosinternet vehicle
 
+  - name: "Sam's Club Membership"
+    match: >-
+      sam'?s membership
+
   - name: 'USAA\.com Payment'
     match: >-
       usaa\.com pay
+
+  - name: 'YMCA Membership & Payments'
+    match: >-
+      champaign county ym
 
   # ----- Insurance -----
   - name: 'USAA Property & Casualty Insurance'
@@ -58,7 +62,7 @@ data:
 
   - name: 'Straight Talk'
     match: >-
-      straighttalk\*services
+      straighttalk\*servic
     tags:
       - 'internet'
 
@@ -127,6 +131,12 @@ data:
     tags:
       - 'taxes'
 
+  - name: 'Federal Tax Return'
+    match: >-
+      tax products pe3
+    tags:
+      - 'taxes'
+
   # ----- Utilities -----
   - name: 'American Water (Illinois)'
     match: >-
@@ -136,7 +146,7 @@ data:
 
   - name: 'Ameren (Illinois)'
     match: >-
-      ^amerenil$
+      amerenil
     tags:
       - 'utilities'
 

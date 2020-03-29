@@ -1,0 +1,12 @@
+# School
+# ------
+
+tags:
+  - 'school'
+
+data:
+  - name: 'University of Illinois Online Payment'
+    match: >-
+      u of il online paym
+    tags:
+      - 'uiuc'

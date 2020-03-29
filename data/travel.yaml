@@ -59,6 +59,12 @@ data:
     tags:
       - 'parking'
 
+  - name: 'Passport Parking'
+    match: >-
+      passport parking
+    tags:
+      - 'parking'
+
   # ----- Transportation (Train, Bus, Flights, & Uber) -----
   - name: 'Allegiant Air'
     match: >-
@@ -124,7 +130,7 @@ data:
 
   - name: "Casey's General Store (Gas Station)"
     match: >-
-      casey'?s gen store
+      (casey'?s gen store)|(^caseys)
     tags:
       - 'gas'
 
@@ -182,6 +188,12 @@ data:
     tags:
       - 'gas'
 
+  - name: 'Jack Flash (Gas Station)'
+    match: >-
+      jack flash
+    tags:
+      - 'gas'
+
   - name: "Jordan's Kwik Stop (Gas Station)"
     match: >-
       jordan'?s kwik stop
@@ -218,6 +230,12 @@ data:
     tags:
       - 'gas'
 
+  - name: 'S&W Food Mart (Gas Station)'
+    match: >-
+      s&w food mart
+    tags:
+      - 'gas'
+
   - name: 'Sheetz (Gas Station)'
     match: >-
       sheetz
@@ -226,7 +244,7 @@ data:
 
   - name: 'Shell (Gas Station)'
     match: >-
-      (shell service station)|(1406 n prospect ave)
+      (shell service)|(1406 n prospect ave)
     tags:
       - 'gas'
 
