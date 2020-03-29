@@ -527,6 +527,48 @@ def tplot_candle(transactions, absval=False, dt='day', key='bal', log=False, sta
     return fig
 
 
+def tplot_sratio(transactions, title='Spending Ratio'):
+    '''
+    Plots the overall spending ratio over time.
+    '''
+    fig = go.Figure()
+    banks = set([t['bank'] for t in transactions])
+    for bank in banks:
+        bt = tfilter(transactions, bank=bank)
+        accounts = set([t['account'] for t in bt])
+        for account in accounts:
+            at = tfilter(bt, account=account)
+            if len(banks) == 1 and len(accounts) == 1:
+                tname = None
+            elif len(banks) == 1 and len(accounts) > 1:
+                tname = account
+            else:
+                tname = '{b} ({a})'.format(b=bank, a=account)
+            dates = sorted(list(set([t['date'] for t in at])))
+            balances = []
+            filtered_dates = []
+            for date in dates:
+                trans = [t['amount'] for t in at if t['date'] <= date]
+                pos = [a for a in trans if a >= 0]
+                neg = [a for a in trans if a < 0]
+                if pos and neg:
+                    filtered_dates.append(date)
+                    balances.append(sum(pos) / abs(sum(neg)))
+            fig.add_trace(go.Scatter(
+                x = filtered_dates,
+                y = balances,
+                mode = 'lines+markers',
+                name = tname,
+            ))
+    fig.update_layout(
+        title = title,
+        xaxis_title = 'Date',
+        yaxis_title = 'Rolling Transaction Spending Ratio',
+        yaxis_type = 'log'
+    )
+    return fig
+
+
 def tplot_tagdist(transactions, absval=False, bin_size=2, ftags=None, log=False, title='Transaction Tag Amount Distribution'):
     '''
     Plots the amount distribution of each tag in the specified list of
