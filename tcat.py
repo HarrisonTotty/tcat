@@ -8,7 +8,7 @@ Banking transaction categorization library for Python.
 import copy
 import csv
 import datetime
-import globi
+import glob
 import json
 import os
 import plotly.figure_factory as ff
