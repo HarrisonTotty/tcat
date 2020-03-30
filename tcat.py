@@ -8,7 +8,8 @@ Banking transaction categorization library for Python.
 import copy
 import csv
 import datetime
-import glob
+import globi
+import json
 import os
 import plotly.figure_factory as ff
 import plotly.graph_objects as go
@@ -227,7 +228,18 @@ def tcoverage(transactions):
     return round((1 - puncat) * 100, 2)
 
 
-def tfilter(transactions, account=None, amount=None, bank=None, date=None, desc=None, name=None, tags=None):
+def texport(transactions, file_path):
+    '''
+    Exports the specified list of transactions to the specified file path.
+    '''
+    exportform = copy.deepcopy(transactions)
+    for t in exportform:
+        t['date'] = t['date'].strftime('%Y/%m/%d')
+    with open(os.path.expanduser(file_path), 'w') as f:
+        json.dump(exportform, f)
+
+
+def tfilter(transactions, account=None, amount=None, bank=None, date=None, desc=None, name=None, notes=None, tags=None):
     '''
     Filters a list of transactions according to a function filtering by:
       * bank
@@ -235,6 +247,7 @@ def tfilter(transactions, account=None, amount=None, bank=None, date=None, desc=
       * tags (as a set)
       * name
       * description
+      * notes
       * dollar amount
       * date
       * Some combination of the above (applied in that order)
@@ -245,9 +258,8 @@ def tfilter(transactions, account=None, amount=None, bank=None, date=None, desc=
         specified must be present for the transaction to be included).
       * A single tag string for the `tags` keyword argument. The transaction
         must contain the specified tag to be included.
-      * A string for the `name` keyword argument.
-      * A string for the `desc` keyword argument. This comparison is
-        case-insensitive and will match on substring as well.
+      * A string for the `name`, `desc`, or `notes` keyword argument. These
+        comparisons are case-insensitive and will match on substring as well.
       * A tuple of integers or floats for the `amount` keyword argument. These
         are taken to constitute a range of amounts (inclusive).
       * An integer for the `date` keyword argument, indicating to filter by the
@@ -285,7 +297,7 @@ def tfilter(transactions, account=None, amount=None, bank=None, date=None, desc=
             if not 'name' in t:
                 continue
             if isinstance(name, str):
-                if t['name'] != name:
+                if not name.lower() in t['name'].lower():
                     continue
             elif not name(t['name']):
                 continue
@@ -294,6 +306,14 @@ def tfilter(transactions, account=None, amount=None, bank=None, date=None, desc=
                 if not desc.lower() in t['desc'].lower():
                     continue
             elif not desc(t['desc']):
+                continue
+        if notes:
+            if not 'notes' in t:
+                continue
+            if isinstance(name, str):
+                if not name.lower() in t['notes'].lower():
+                    continue
+            elif not name(t['notes']):
                 continue
         if amount:
             if isinstance(amount, tuple):
@@ -369,6 +389,18 @@ def tgroup(transactions, by='date-weekly'):
         groups.append([sortedt[i]])
         gi += 1
     return groups
+
+
+def timport(file_path):
+    '''
+    Imports pre-parsed transaction data from the specified file path.
+    '''
+    with open(os.path.expanduser(file_path), 'r') as f:
+        exportform = json.load(f)
+    importform = copy.deepcopy(exportform)
+    for t in importform:
+        t['date'] = datetime.datetime.strptime(t['date'], '%Y/%m/%d')
+    return importform
 
 
 def tmax(transactions):
@@ -646,10 +678,15 @@ def tprint(transaction, extended=False):
         max_bank = max(map(len, [t['bank'] for t in transaction]))
         max_desc = max(map(len, [t['desc'] for t in transaction]))
         has_names = ['name' in t for t in transaction]
+        has_notes = ['notes' in t for t in transaction]
         if True in has_names:
             max_name = max(map(len, [t['name'] for t in transaction if 'name' in t]))
         else:
             max_name = 0
+        if True in has_notes:
+            max_notes = max(map(len, [t['notes'] for t in transaction if 'notes' in t]))
+        else:
+            max_notes = 0
         if not False in has_names:
             max_namedesc = max_name
         elif max_name >= max_desc:
@@ -664,26 +701,34 @@ def tprint(transaction, extended=False):
             header_line += 'NAME/DESC' + (' ' * (max_namedesc - 9)) + '  '
         else:
             header_line += 'NAME/DESCRIPTION' + (' ' * (max_namedesc - 16)) + '  '
+        if max_notes:
+            header_line += 'NOTES' + (' ' * (max_notes - 5)) + '  '
         if max_amount < 6:
             header_line += 'AMT' + (' ' * (max_amount - 3)) + '  '
         else:
             header_line += 'AMOUNT' + (' ' * (max_amount - 6)) + '  '
         if extended:
             if max_bal < 7:
-                header_line += 'BAL' + (' ' * (max_bal - 3))
+                header_line += 'BAL' + (' ' * (max_bal - 3)) + '  '
             else:
-                header_line += 'BALANCE' + (' ' * (max_bal - 7))
+                header_line += 'BALANCE' + (' ' * (max_bal - 7)) + '  '
         print(header_line)
         print('-' * len(header_line))
         for t in transaction:
             pamount = dstr(t['amount'])
             pname = t['name'] if 'name' in t else t['desc']
+            pnotes = t['notes'] if 'notes' in t else 'N/A'
+            if max_notes:
+                notespad = (' ' * (max_notes - pnotes))
+            else:
+                notespad = '  '
             if extended:
-                pt = '{date}  {bank}  {account}  {name}  {amount}\t{bal}'.format(
+                pt = '{date}  {bank}  {account}  {name}  {notes}  {amount}\t{bal}'.format(
                     date = t['date'].strftime('%Y/%m/%d'),
                     bank = t['bank'] + (' ' * (max_bank - len(t['bank']))),
                     account = t['account'] + (' ' * (max_account - len(t['account']))),
                     name = pname + (' ' * (max_namedesc - len(pname))),
+                    notes = pnotes + notespad,
                     amount = pamount + (' ' * (max_amount - len(pamount))),
                     bal = dstr(t['bal'])
                 )
@@ -704,6 +749,8 @@ def tprint(transaction, extended=False):
             print('Description: ' + transaction['desc'])
     else:
         print('Description: ' + transaction['desc'])
+    if extended and 'notes' in transaction and transaction['notes']:
+        print('Notes:       ' + transaction['notes'])
     print('Date:        ' + transaction['date'].strftime('%Y/%m/%d'))
     print('Amount:      ' + dstr(transaction['amount']))
     print('Balance:     ' + dstr(transaction['bal']))
