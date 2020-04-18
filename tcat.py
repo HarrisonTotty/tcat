@@ -239,7 +239,7 @@ def texport(transactions, file_path):
         json.dump(exportform, f)
 
 
-def tfilter(transactions, account=None, amount=None, bank=None, date=None, desc=None, name=None, notes=None, tags=None):
+def tfilter(transactions, account=None, amount=None, bank=None, date=None, desc=None, name=None, negate=False, notes=None, tags=None):
     '''
     Filters a list of transactions according to a function filtering by:
       * bank
@@ -268,71 +268,155 @@ def tfilter(transactions, account=None, amount=None, bank=None, date=None, desc=
         keyword argument.
       * A tuple of date strings for the `date` keyword argument, each of the
         form above. These are taken to constitute a range of dates (inclusive).
+    If `negate` is set to True, then each filter specification is reversed. For
+    example, if you specified an array of tag strings for the `tags` keyword
+    argument but set `negate` to `True`, then the result of this function would
+    be the list of all transactions that did _not_ contain any of the specified
+    tags.
     '''
     most_recent_date = max([t['date'] for t in transactions])
     filtered = []
     for t in transactions:
         if bank:
             if isinstance(bank, str):
-                if bank.lower() != t['bank'].lower():
-                    continue
-            elif not bank(t['bank']):
-                continue
+                if negate:
+                    if bank.lower() == t['bank'].lower():
+                        continue
+                else:
+                    if bank.lower() != t['bank'].lower():
+                        continue
+            else:
+                if negate:
+                    if bank(t['bank']):
+                        continue
+                else:
+                    if not bank(t['bank']):
+                        continue
         if account:
             if isinstance(account, str):
-                if account.lower() != t['account'].lower():
-                    continue
-            elif not account(t['account']):
-                continue
+                if negate:
+                    if account.lower() == t['account'].lower():
+                        continue
+                else:
+                    if account.lower() != t['account'].lower():
+                        continue
+            else:
+                if negate:
+                    if account(t['account']):
+                        continue
+                else:
+                    if not account(t['account']):
+                        continue
         if tags:
             if isinstance(tags, str):
-                if not tags in t['tags']:
-                    continue
+                if negate:
+                    if tags in t['tags']:
+                        continue
+                else:
+                    if not tags in t['tags']:
+                        continue
             elif isinstance(tags, list):
-                if not True in [(tag in t['tags']) for tag in tags]:
-                    continue
-            elif not tags(set(t['tags'])):
-                continue
+                if negate:
+                    if (True in [(tag in t['tags']) for tag in tags]):
+                        continue
+                else:
+                    if not (True in [(tag in t['tags']) for tag in tags]):
+                        continue
+            else:
+                if negate:
+                    if tags(set(t['tags'])):
+                        continue
+                else:
+                    if not tags(set(t['tags'])):
+                        continue
         if name:
             if not 'name' in t:
-                continue
+                if not negate: continue
             if isinstance(name, str):
-                if not name.lower() in t['name'].lower():
-                    continue
-            elif not name(t['name']):
-                continue
+                if negate:
+                    if name.lower() in t['name'].lower():
+                        continue
+                else:
+                    if not name.lower() in t['name'].lower():
+                        continue
+            else:
+                if negate:
+                    if name(t['name']):
+                        continue
+                else:
+                    if not name(t['name']):
+                        continue
         if desc:
             if isinstance(desc, str):
-                if not desc.lower() in t['desc'].lower():
-                    continue
-            elif not desc(t['desc']):
-                continue
+                if negate:
+                    if desc.lower() in t['desc'].lower():
+                        continue
+                else:
+                    if not desc.lower() in t['desc'].lower():
+                        continue
+            else:
+                if negate:
+                    if desc(t['desc']):
+                        continue
+                else:
+                    if not desc(t['desc']):
+                        continue
         if notes:
             if not 'notes' in t:
-                continue
-            if isinstance(name, str):
-                if not name.lower() in t['notes'].lower():
-                    continue
-            elif not name(t['notes']):
-                continue
+                if not negate: continue
+            if isinstance(notes, str):
+                if negate:
+                    if notes.lower() in t['notes'].lower():
+                        continue
+                else:
+                    if not notes.lower() in t['notes'].lower():
+                        continue
+            else:
+                if negate:
+                    if notes(t['notes']):
+                        continue
+                else:
+                    if not notes(t['notes']):
+                        continue
         if amount:
             if isinstance(amount, tuple):
-                if t['amount'] < amount[0] or t['amount'] > amount[1]:
-                    continue
-            elif not amount(t['amount']):
-                continue
+                if negate:
+                    if t['amount'] >= amount[0] and t['amount'] <= amount[1]:
+                        continue
+                else:
+                    if t['amount'] < amount[0] or t['amount'] > amount[1]:
+                        continue
+            else:
+                if negate:
+                    if amount(t['amount']):
+                        continue
+                else:
+                    if not amount(t['amount']):
+                        continue
         if date:
             if isinstance(date, int):
-                if (most_recent_date - t['date']).days > date:
-                    continue
+                if negate:
+                    if (most_recent_date - t['date']).days <= date:
+                        continue
+                else:
+                    if (most_recent_date - t['date']).days > date:
+                        continue
             elif isinstance(date, str):
                 sd = list(map(int, date.split('/')))
-                if len(sd) >= 1 and t['date'].year != sd[0]:
-                    continue
-                if len(sd) >= 2 and t['date'].month != sd[1]:
-                    continue
-                if len(sd) >= 3 and t['date'].day != sd[2]:
-                    continue
+                if negate:
+                    if len(sd) >= 1 and t['date'].year == sd[0]:
+                        continue
+                    if len(sd) >= 2 and t['date'].month == sd[1]:
+                        continue
+                    if len(sd) >= 3 and t['date'].day == sd[2]:
+                        continue
+                else:
+                    if len(sd) >= 1 and t['date'].year != sd[0]:
+                        continue
+                    if len(sd) >= 2 and t['date'].month != sd[1]:
+                        continue
+                    if len(sd) >= 3 and t['date'].day != sd[2]:
+                        continue
             elif isinstance(date, tuple):
                 sd1 = list(map(int, date[0].split('/')))
                 while len(sd1) < 3: sd1.append(1)
@@ -340,10 +424,19 @@ def tfilter(transactions, account=None, amount=None, bank=None, date=None, desc=
                 while len(sd2) < 3: sd2.append(1)
                 lowerbound = datetime.datetime(*sd1)
                 upperbound = datetime.datetime(*sd2)
-                if t['date'] < lowerbound or t['date'] > upperbound:
-                    continue
-            elif not date(t['date']):
-                continue
+                if negate:
+                    if t['date'] >= lowerbound and t['date'] <= upperbound:
+                        continue
+                else:
+                    if t['date'] < lowerbound or t['date'] > upperbound:
+                        continue
+            else:
+                if negate:
+                    if date(t['date']):
+                        continue
+                else:
+                    if not date(t['date']):
+                        continue
         filtered.append(copy.deepcopy(t))
     return filtered
 
@@ -481,7 +574,7 @@ def tmin(transactions):
     return min([t['amount'] for t in transactions])
 
 
-def tplot(transactions, absval=False, key='bal', rolling=0, slider=False, smooth=False, statistic='median', title=None):
+def tplot(transactions, absval=False, key='bal', rolling=0, slider=False, smooth=False, statistic='median', style='lines+markers', title=None):
     '''
     Produces a graphical plot of the specified list of transactions. By default,
     this function will produce a line plot of the balance over time. Each
@@ -526,7 +619,7 @@ def tplot(transactions, absval=False, key='bal', rolling=0, slider=False, smooth
                 y = balances,
                 hovertext = hovertext,
                 line_shape='spline' if smooth else 'linear',
-                mode = 'lines+markers',
+                mode = style,
                 name = tname,
             ))
     if key == 'amount':
@@ -603,7 +696,7 @@ def tplot_candle(transactions, absval=False, dt='day', key='bal', log=False, sta
     return fig
 
 
-def tplot_sratio(transactions, title='Spending Ratio'):
+def tplot_sratio(transactions, style='lines+markers', title='Spending Ratio'):
     '''
     Plots the overall spending ratio over time.
     '''
@@ -642,7 +735,7 @@ def tplot_sratio(transactions, title='Spending Ratio'):
                 x = filtered_dates,
                 y = balances,
                 hovertext = hovertext,
-                mode = 'lines+markers',
+                mode = style,
                 name = tname,
             ))
     fig.update_layout(
@@ -650,6 +743,49 @@ def tplot_sratio(transactions, title='Spending Ratio'):
         xaxis_title = 'Date',
         yaxis_title = 'Rolling Transaction Spending Ratio',
         yaxis_type = 'log'
+    )
+    return fig
+
+
+def tplot_tagbar(transactions, ftags=None, statistic='median', title='Transaction Amounts by Tag'):
+    '''
+    Plots a series of bar charts grouped by tag.
+    '''
+    if statistic == 'mean':
+        statfunc = statistics.mean
+    elif statistic == 'median':
+        statfunc = statistics.median
+    elif statistic == 'stdev':
+        statfunc = statistics.stdev
+    elif statistic == 'total' or statistic == 'sum':
+        statfunc = sum
+    fig = go.Figure()
+    all_tags = tags(transactions)
+    filtered_tags = []
+    all_values = []
+    for tag in all_tags:
+        if ftags and not tag in ftags:
+            continue
+        filtered_tags.append(tag)
+        all_values.append(statfunc([abs(t['amount']) for t in tfilter(transactions, tags=tag)]))
+    fig.add_trace(go.Bar(
+        x = filtered_tags,
+        y = all_values,
+    ))
+    yt = 'Transaction Amount ($)'
+    if statistic == 'mean':
+        yt = 'Mean ' + yt
+    elif statistic == 'median':
+        yt = 'Median ' + yt
+    elif statistic == 'stdev':
+        yt = 'Standard Deviation of ' + yt
+    elif statistic in ['sum', 'total']:
+        yt = 'Total ' + yt
+    fig.update_layout(
+        title = title,
+        xaxis_tickangle = -45,
+        xaxis_title = 'Tag',
+        yaxis_title = yt,
     )
     return fig
 
