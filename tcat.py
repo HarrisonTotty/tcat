@@ -260,6 +260,8 @@ def tfilter(transactions, account=None, amount=None, bank=None, date=None, desc=
         must contain the specified tag to be included.
       * A string for the `name`, `desc`, or `notes` keyword argument. These
         comparisons are case-insensitive and will match on substring as well.
+      * A string for the `amount` keyword argument, being either `deposit` or
+        `withdrawal`, their shorthand forms `d` or `w`, or `+` or `-`.
       * A tuple of integers or floats for the `amount` keyword argument. These
         are taken to constitute a range of amounts (inclusive).
       * An integer for the `date` keyword argument, indicating to filter by the
@@ -379,6 +381,21 @@ def tfilter(transactions, account=None, amount=None, bank=None, date=None, desc=
                     if not notes(t['notes']):
                         continue
         if amount:
+            if isinstance(amount, str):
+                if amount.lower() in ['+', 'd', 'deposit']:
+                    if negate:
+                        if t['amount'] > 0:
+                            continue
+                    else:
+                        if t['amount'] <= 0:
+                            continue
+                if amount.lower() in ['-', 'w', 'withdawal']:
+                    if negate:
+                        if t['amount'] < 0:
+                            continue
+                    else:
+                        if t['amount'] >= 0:
+                            continue
             if isinstance(amount, tuple):
                 if negate:
                     if t['amount'] >= amount[0] and t['amount'] <= amount[1]:
@@ -747,7 +764,7 @@ def tplot_sratio(transactions, style='lines+markers', title='Spending Ratio'):
     return fig
 
 
-def tplot_tagbar(transactions, ftags=None, statistic='median', title='Transaction Amounts by Tag'):
+def tplot_tagbar(transactions, hide=['macro', 'micro'], log=False, ftags=None, statistic='median', thres=1000, title='Transaction Amounts by Tag'):
     '''
     Plots a series of bar charts grouped by tag.
     '''
@@ -763,11 +780,25 @@ def tplot_tagbar(transactions, ftags=None, statistic='median', title='Transactio
     all_tags = tags(transactions)
     filtered_tags = []
     all_values = []
+    others = []
     for tag in all_tags:
+        if hide and tag in hide:
+            continue
         if ftags and not tag in ftags:
             continue
-        filtered_tags.append(tag)
-        all_values.append(statfunc([abs(t['amount']) for t in tfilter(transactions, tags=tag)]))
+        ts = tfilter(transactions, tags=tag)
+        ts_total = sum([abs(t['amount']) for t in ts])
+        if ts_total < thres:
+            others = tmerge(others, ts)
+        else:
+            filtered_tags.append(tag)
+            if statistic == 'total' or statistic == 'sum':
+                all_values.append(ts_total)
+            else:
+                all_values.append(statfunc([abs(t['amount']) for t in ts]))
+    if others:
+        filtered_tags.append('(other)')
+        all_values.append(statfunc([abs(t['amount']) for t in others]))
     fig.add_trace(go.Bar(
         x = filtered_tags,
         y = all_values,
@@ -786,6 +817,7 @@ def tplot_tagbar(transactions, ftags=None, statistic='median', title='Transactio
         xaxis_tickangle = -45,
         xaxis_title = 'Tag',
         yaxis_title = yt,
+        yaxis_type = 'log' if log else 'linear'
     )
     return fig
 
