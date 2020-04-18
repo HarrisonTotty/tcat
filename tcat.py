@@ -428,11 +428,49 @@ def tmerge(*args, reverse=False):
     '''
     Merges one or more transaction lists into a single one. The result is then
     sorted by transaction date with the most recent entries at the beginning of
-    the list by default.
+    the list by default. The merging process will automatically delete duplicate
+    entries, but preferres the last arguments to have preferrence.
     '''
     merged = []
-    for t in args:
-        merged.extend(copy.deepcopy(t))
+    for ts in args:
+        for t in ts:
+            ct = copy.deepcopy(t)
+            if not merged:
+                merged.append(ct)
+            else:
+                duplicate_index = -1
+                for i, m in enumerate(merged):
+                    if ct['date'] != m['date']:
+                        continue
+                    if ct['bank'] != m['bank']:
+                        continue
+                    if ct['account'] != m['account']:
+                        continue
+                    if ct['desc'] != m['desc']:
+                        continue
+                    if ct['amount'] != m['amount']:
+                        continue
+                    if ct['bal'] != m['bal']:
+                        continue
+                    duplicate_index = i
+                    break
+                if duplicate_index == -1:
+                    merged.append(ct)
+                else:
+                    dedup = copy.deepcopy(merged[duplicate_index])
+                    if (not 'name' in dedup or not dedup['name']) and ('name' in ct):
+                        dedup['name'] = ct['name']
+                    elif 'name' in dedup and ('name' in ct and ct['name']):
+                        dedup['name'] = ct['name']
+                    if (not 'notes' in dedup or not dedup['notes']) and ('notes' in ct):
+                        dedup['notes'] = ct['notes']
+                    elif 'notes' in dedup and ('notes' in ct and ct['notes']):
+                        dedup['notes'] = ct['notes']
+                    if (not 'tags' in dedup or not dedup['tags']) and ('tags' in ct):
+                        dedup['tags'] = ct['tags']
+                    elif 'tags' in dedup and ('tags' in ct and ct['tags']):
+                        dedup['tags'] = ct['tags']
+                    merged[duplicate_index] = dedup
     return tsort(merged, reverse=reverse)
 
 
@@ -443,7 +481,7 @@ def tmin(transactions):
     return min([t['amount'] for t in transactions])
 
 
-def tplot(transactions, absval=False, key='bal', rolling=0, slider=False, statistic='median', title=None):
+def tplot(transactions, absval=False, key='bal', rolling=0, slider=False, smooth=False, statistic='median', title=None):
     '''
     Produces a graphical plot of the specified list of transactions. By default,
     this function will produce a line plot of the balance over time. Each
@@ -472,16 +510,22 @@ def tplot(transactions, absval=False, key='bal', rolling=0, slider=False, statis
                 tname = '{b} ({a})'.format(b=bank, a=account)
             dates = sorted(list(set([t['date'] for t in at])))
             balances = []
+            hovertext = []
             for date in dates:
-                if rolling:
-                    val = statfunc([t[key] for t in at if (date - t['date']).days >= 0 and (date - t['date']).days <= rolling])
-                    balances.append(abs(val) if absval else val)
-                else:
-                    val = statfunc([t[key] for t in at if t['date'] == date])
-                    balances.append(abs(val) if absval else val)
+                ht = []
+                ts = [t for t in at if (date - t['date']).days >= 0 and (date - t['date']).days <= rolling]
+                for t in ts:
+                    namestr = t['name'] if 'name' in t else t['desc']
+                    valstr = dstr(t['amount'])
+                    ht.append(namestr + ' (' + valstr + ')')
+                val = statfunc([t[key] for t in ts])
+                balances.append(abs(val) if absval else val)
+                hovertext.append(' | '.join(ht))
             fig.add_trace(go.Scatter(
                 x = dates,
                 y = balances,
+                hovertext = hovertext,
+                line_shape='spline' if smooth else 'linear',
                 mode = 'lines+markers',
                 name = tname,
             ))
@@ -579,16 +623,25 @@ def tplot_sratio(transactions, title='Spending Ratio'):
             dates = sorted(list(set([t['date'] for t in at])))
             balances = []
             filtered_dates = []
+            hovertext = []
             for date in dates:
+                ht = []
+                ts = [t for t in at if t['date'] == date]
+                for t in ts:
+                    namestr = t['name'] if 'name' in t else t['desc']
+                    valstr = dstr(t['amount'])
+                    ht.append(namestr + ' (' + valstr + ')')
                 trans = [t['amount'] for t in at if t['date'] <= date]
                 pos = [a for a in trans if a >= 0]
                 neg = [a for a in trans if a < 0]
                 if pos and neg:
                     filtered_dates.append(date)
                     balances.append(sum(pos) / abs(sum(neg)))
+                    hovertext.append(' | '.join(ht))
             fig.add_trace(go.Scatter(
                 x = filtered_dates,
                 y = balances,
+                hovertext = hovertext,
                 mode = 'lines+markers',
                 name = tname,
             ))
@@ -701,8 +754,11 @@ def tprint(transaction, extended=False):
             header_line += 'NAME/DESC' + (' ' * (max_namedesc - 9)) + '  '
         else:
             header_line += 'NAME/DESCRIPTION' + (' ' * (max_namedesc - 16)) + '  '
-        if max_notes:
-            header_line += 'NOTES' + (' ' * (max_notes - 5)) + '  '
+        if extended:
+            if max_notes:
+                header_line += 'NOTES' + (' ' * (max_notes - 5)) + '  '
+            else:
+                header_line += 'NOTES  '
         if max_amount < 6:
             header_line += 'AMT' + (' ' * (max_amount - 3)) + '  '
         else:
@@ -723,7 +779,7 @@ def tprint(transaction, extended=False):
             else:
                 notespad = '  '
             if extended:
-                pt = '{date}  {bank}  {account}  {name}  {notes}  {amount}\t{bal}'.format(
+                pt = '{date}  {bank}  {account}  {name}  {notes}  {amount}  {bal}'.format(
                     date = t['date'].strftime('%Y/%m/%d'),
                     bank = t['bank'] + (' ' * (max_bank - len(t['bank']))),
                     account = t['account'] + (' ' * (max_account - len(t['account']))),
