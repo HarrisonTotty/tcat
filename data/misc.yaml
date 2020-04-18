@@ -30,18 +30,6 @@ data:
     match: >-
       bed bath & beyond
 
-  - name: 'Bronze Giraffe Antiques'
-    match: >-
-      bronze giraffe anti
-
-  - name: "Captain Jack's Treasure"
-    match: >-
-      captain jack'?s treasure
-
-  - name: 'Champain County ?'
-    match: >-
-      ^champaign county$
-   
   - name: 'Champaign Park District'
     match: >-
       champaign park dist
@@ -59,14 +47,6 @@ data:
       cardmember serv
     tags:
       - 'credit-card'
-
-  - name: 'Crossroads Corner Consignment'
-    match: >-
-      crossroads corner consi
-
-  - name: 'Dandelion Vintage & Used'
-    match: >-
-      dandelion vintage
 
   - name: 'Family Dollar'
     match: >-
@@ -171,6 +151,32 @@ data:
   - name: 'Wedding Registry Donation'
     match: >-
       (knot wedding registry)|(honeyfund heather)
+
+  # ----- Antiques -----
+  - name: 'Bronze Giraffe Antiques'
+    match: >-
+      bronze giraffe anti
+    tags:
+      - 'antiques'
+
+  - name: "Captain Jack's Treasure"
+    match: >-
+      captain jack'?s treasure
+    tags:
+      - 'antiques'
+
+  - name: 'Crossroads Corner Consignment'
+    match: >-
+      crossroads corner consi
+    tags:
+      - 'antiques'
+
+  - name: 'Dandelion Vintage & Used'
+    match: >-
+      dandelion vintage
+    tags:
+      - 'antiques'
+
 
   # ----- Book Stores -----
   - name: 'Barnes & Noble'

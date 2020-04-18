@@ -38,7 +38,7 @@ data:
     match: >-
       sam'?s membership
 
-  - name: 'USAA\.com Payment'
+  - name: 'USAA.com Payment'
     match: >-
       usaa\.com pay
 
@@ -122,6 +122,12 @@ data:
   - name: 'IRS (Taxes)'
     match: >-
       ^irs$
+    tags:
+      - 'taxes'
+
+  - name: 'Champaign County Property Tax'
+    match: >-
+      ^champaign county$
     tags:
       - 'taxes'
 
