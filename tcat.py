@@ -396,7 +396,7 @@ def tfilter(transactions, account=None, amount=None, bank=None, date=None, desc=
                     else:
                         if t['amount'] >= 0:
                             continue
-            if isinstance(amount, tuple):
+            elif isinstance(amount, tuple):
                 if negate:
                     if t['amount'] >= amount[0] and t['amount'] <= amount[1]:
                         continue
