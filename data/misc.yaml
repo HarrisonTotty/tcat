@@ -48,6 +48,10 @@ data:
     tags:
       - 'credit-card'
 
+  - name: 'EZ Pay (Money Order Service)'
+    match: >-
+      ^ez pay
+
   - name: 'Family Dollar'
     match: >-
       family dollar
@@ -135,6 +139,10 @@ data:
   - name: 'University of Illinois'
     match: >-
       universityofillinois
+
+  - name: 'The UPS Store'
+    match: >-
+      the ?ups ?store
 
   - name: 'Venmo Transfer'
     match: >-

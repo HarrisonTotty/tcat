@@ -11,9 +11,11 @@ import datetime
 import glob
 import json
 import os
+import numpy
 import plotly.figure_factory as ff
 import plotly.graph_objects as go
 import re
+from sklearn import linear_model as sklm
 import statistics
 import sys
 import yaml
@@ -119,6 +121,82 @@ class Categorizer:
         An alias for `categorize_transactions`.
         '''
         return self.categorize_transactions(transactions)
+
+
+class FitModel:
+    '''
+    An object that contains fit regression information.
+    '''
+    def __init__(self, transactions, absval=False, alg='ols', key='bal', statistic='median'):
+        '''
+        Initializes a fit model based on the specified list of transactions and
+        regression options.
+        '''
+        self.alg = alg
+        self.key = key
+        self.statistic = statistic
+        if statistic == 'mean':
+            statfunc = statistics.mean
+        elif statistic == 'median':
+            statfunc = statistics.median
+        elif statistic == 'stdev':
+            statfunc = statistics.stdev
+        elif statistic == 'total' or statistic == 'sum':
+            statfunc = sum
+        dates = sorted(list(set([t['date'] for t in transactions])))
+        most_recent_date = max(dates)
+        self.zero_date = copy.deepcopy(most_recent_date)
+        xs = []
+        ys = []
+        for date in dates:
+            x = (date - most_recent_date).days
+            ts = [t for t in transactions if t['date'] == date]
+            if absval:
+                y = statfunc([abs(t[key]) for t in ts])
+            else:
+                y = statfunc([t[key] for t in ts])
+            xs.append([x])
+            ys.append(y)
+        if alg == 'ols':
+            reg = sklm.LinearRegression()
+            reg.fit(xs, ys)
+            self.intercept = reg.intercept_
+            self.slope = reg.coef_[0]
+            self.r2 = reg.score(xs, ys)
+        self.reg = reg
+
+    def predict(self, date):
+        '''
+        Predicts the value of the model at the specified date.
+        '''
+        if isinstance(date, int):
+            return self.reg.predict([[date]])[0]
+        elif isinstance(date, datetime.datetime):
+            return self.reg.predict([[(date - self.zero_date).days]])[0]
+
+    def trace(self, dates):
+        if self.alg == 'ols':
+            name = 'OLS Regression'
+        (ld, ud) = dates
+        xs = []
+        ys = []
+        hovertext = []
+        if isinstance(ld, int) and isinstance(ud, int):
+            for d in range(ld, ud + 1):
+                xs.append(self.zero_date + datetime.timedelta(d))
+                ys.append(self.predict(d))
+                hovertext.append('R2: {} | Slope: {} | Intercept: {}'.format(
+                    str(round(self.r2, 4)),
+                    str(round(self.slope, 2)),
+                    str(round(self.intercept, 2))
+                ))
+        return go.Scatter(
+            x = xs,
+            y = ys,
+            hovertext = hovertext,
+            mode = 'lines',
+            name = name
+        )
 
 
 def dstr(amount):
@@ -458,6 +536,7 @@ def tfilter(transactions, account=None, amount=None, bank=None, date=None, desc=
     return filtered
 
 
+
 def tgroup(transactions, by='date-weekly'):
     '''
     Groups the specified list of transactions according to a quantifier.
@@ -654,6 +733,7 @@ def tplot(transactions, absval=False, key='bal', rolling=0, slider=False, smooth
     if rolling:
         yt = 'Rolling ' + yt
     fig.update_layout(
+        showlegend = True,
         title = title,
         xaxis_rangeslider_visible = slider,
         xaxis_title = 'Date',

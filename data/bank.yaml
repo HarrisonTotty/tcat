@@ -60,21 +60,28 @@ data:
     tags:
       - 'xfer'
 
-  - name: 'Transfer: Checking -> Savings'
+  - name: 'Transfer: From Savings (Remote Car Starter)'
+    match: >-
+      from share 22
+    tags:
+      - 'xfer'
+      - 'xfer-savings'
+
+  - name: 'Transfer: To Savings'
     match: >-
       (to share 01)
     tags:
       - 'xfer'
       - 'xfer-savings'
 
-  - name: "Transfer: Checking -> Savings (Harrison's Schooling)"
+  - name: "Transfer: To Savings (Harrison's Schooling)"
     match: >-
       to share 21
     tags:
       - 'xfer'
       - 'xfer-savings'
  
-  - name: 'Transfer: Checking -> Savings (Remote Car Starter)'
+  - name: 'Transfer: To Savings (Remote Car Starter)'
     match: >-
       to share 22
     tags:

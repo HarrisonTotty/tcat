@@ -33,7 +33,7 @@ data:
 
   - name: 'Green Chef'
     match: >-
-      green chef
+      green ?chef
     tags:
       - 'delivery'
 
