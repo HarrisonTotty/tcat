@@ -194,7 +194,7 @@ data:
       - 'delivery'
       - 'fast-food'
 
-  - name: 'Siam Terrace (GubHub)'
+  - name: 'Siam Terrace (GrubHub)'
     match: >-
       grubhubsiamterrace
     tags: >-
