@@ -194,6 +194,13 @@ data:
       - 'delivery'
       - 'fast-food'
 
+  - name: 'Siam Terrace (GubHub)'
+    match: >-
+      grubhubsiamterrace
+    tags: >-
+      - 'delivery'
+      - 'restaurant'
+
   - name: "Smoky's House BBQ (Grubhub)"
     match: >
       grubhubsmokyshouse
