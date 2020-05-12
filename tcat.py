@@ -27,6 +27,7 @@ import statistics
 import sys
 import yaml
 
+
 class Categorizer:
     '''
     An object that can translate a raw bank transaction.
@@ -455,8 +456,8 @@ def parse_csv(csv_file, bank=None, account=None):
         for d in init_parse:
             parsed.append({
                 'account': the_account,
-                'amount': float(d['Amount'].replace('$', '')),
-                'bal': float(d['Balance'].replace('$', '')),
+                'amount': parse_dstr(d['Amount']),
+                'bal': parse_dstr(d['Balance']),
                 'bank': the_bank,
                 'date': datetime.datetime.strptime(d['Date'], '%m/%d/%Y'),
                 'desc': d['Description'].replace('&#39;', "'").replace('&amp;', '&'),
@@ -466,14 +467,25 @@ def parse_csv(csv_file, bank=None, account=None):
         for d in init_parse:
             parsed.append({
                 'account': the_account,
-                'amount': float(d['Amount']),
-                'bal': float(d['Balance']),
+                'amount': parse_dstr(d['Amount']),
+                'bal': parse_dstr(d['Balance']),
                 'bank': the_bank,
                 'date': datetime.datetime.strptime(d['Date'], '%m/%d/%Y'),
                 'desc': d['Description'],
                 'tags': []
             })
     return parsed
+
+
+def parse_dstr(input_string):
+    '''
+    Parses the specified dollar amount string into a float value.
+    '''
+    no_currency = input_string.replace('$', '')
+    if '(' in input_string and ')' in input_string:
+        return round(-1 * float(no_currency.replace('(', '').replace(')', '')), 2)
+    else:
+        return round(float(no_currency), 2)
 
 
 def tags(transactions):
