@@ -33,7 +33,7 @@ data:
 
   - name: 'Green Chef'
     match: >-
-      green ?chef
+      (green ?chef)|(grncheforder)
     tags:
       - 'delivery'
 
@@ -44,6 +44,10 @@ data:
   - name: 'Instacart'
     match: >-
       instacart
+
+  - name: 'PetSmart'
+    match: >-
+      petsmart
 
   - name: 'Publix'
     match: >-

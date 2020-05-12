@@ -131,6 +131,13 @@ data:
       - 'delivery'
       - 'restaurant'
 
+  - name: 'Lao Sze Chuan (Grubhub)'
+    match: >-
+      grubhublaoszechuan
+    tags:
+      - 'delivery'
+      - 'restaurant'
+
   - name: "Long John Silver's (DoorDash)"
     match: >
       doordash\*long john
