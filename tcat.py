@@ -16,6 +16,13 @@ import plotly.figure_factory as ff
 import plotly.graph_objects as go
 import re
 from sklearn import linear_model as sklm
+from sklearn import neighbors as sknn
+from sklearn import neural_network as skneural
+from sklearn import svm as sksvm
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import AdaBoostRegressor
+from sklearn.preprocessing import StandardScaler, QuantileTransformer
+from sklearn.pipeline import make_pipeline
 import statistics
 import sys
 import yaml
@@ -127,7 +134,7 @@ class FitModel:
     '''
     An object that contains fit regression information.
     '''
-    def __init__(self, transactions, absval=False, alg='ols', key='bal', statistic='median'):
+    def __init__(self, transactions, absval=False, alg='ols', kernel='rbf', key='bal', statistic='median'):
         '''
         Initializes a fit model based on the specified list of transactions and
         regression options.
@@ -163,6 +170,42 @@ class FitModel:
             self.intercept = reg.intercept_
             self.slope = reg.coef_[0]
             self.r2 = reg.score(xs, ys)
+        elif alg == 'bdt':
+            reg = AdaBoostRegressor(
+                DecisionTreeRegressor(max_depth=8),
+                n_estimators = 300,
+                random_state = numpy.random.RandomState(1)
+            )
+            reg.fit(xs, ys)
+            self.r2 = reg.score(xs, ys)
+        elif alg == 'knn':
+            reg = sknn.KNeighborsRegressor(
+                n_neighbors = 2,
+                weights = 'distance'
+            )
+            reg.fit(xs, ys)
+            self.r2 = reg.score(xs, ys)
+        elif alg == 'mlp':
+            reg = make_pipeline(StandardScaler(), skneural.MLPRegressor(
+                activation = 'logistic',
+                #early_stopping = True,
+                hidden_layer_sizes = (1000, 10),
+                learning_rate = 'constant',
+                learning_rate_init = 0.0001,
+                max_iter = 10000000,
+                random_state = 0,
+                solver = 'adam'
+            ))
+            reg.fit(xs, ys)
+            self.r2 = reg.score(xs, ys)
+        elif alg == 'svm':
+            reg = sksvm.SVR(
+                C = 100,
+                kernel = kernel
+            )
+            reg.fit(xs, ys)
+            self.r2 = reg.score(xs, ys)
+            self.kernel = kernel
         self.reg = reg
 
     def predict(self, date):
@@ -177,6 +220,16 @@ class FitModel:
     def trace(self, dates):
         if self.alg == 'ols':
             name = 'OLS Regression'
+        elif self.alg == 'bdt':
+            name = 'BDT Regression'
+        elif self.alg == 'knn':
+            name = 'KNN Regression'
+        elif self.alg == 'mlp':
+            name = 'MLP Regression'
+        elif self.alg == 'sgd':
+            name = 'SGD Regression'
+        elif self.alg == 'svm':
+            name = 'SVM Regression'
         (ld, ud) = dates
         xs = []
         ys = []
@@ -185,11 +238,21 @@ class FitModel:
             for d in range(ld, ud + 1):
                 xs.append(self.zero_date + datetime.timedelta(d))
                 ys.append(self.predict(d))
-                hovertext.append('R2: {} | Slope: {} | Intercept: {}'.format(
-                    str(round(self.r2, 4)),
-                    str(round(self.slope, 2)),
-                    str(round(self.intercept, 2))
-                ))
+                if self.alg == 'ols':
+                    hovertext.append('r2: {} | slope: {} | intercept: {}'.format(
+                        str(round(self.r2, 4)),
+                        str(round(self.slope, 2)),
+                        str(round(self.intercept, 2))
+                    ))
+                elif self.alg == 'svm':
+                    hovertext.append('r2: {} | kernel: {}'.format(
+                        str(round(self.r2, 4)),
+                        self.kernel
+                    ))
+                else:
+                    hovertext.append('r2: {}'.format(
+                        str(round(self.r2, 4))
+                    ))
         return go.Scatter(
             x = xs,
             y = ys,
@@ -197,6 +260,150 @@ class FitModel:
             mode = 'lines',
             name = name
         )
+
+
+class Simulator:
+    '''
+    Simulates the continuation of trends from a given list of transactions.
+    '''
+    def __init__(self, transactions, date=None):
+        '''
+        Creates a new `Simulator` object with the properties derived from the
+        specified list of transactions. The properties may be derived by
+        constraining the sample date in the same fashion as `tfilter` with the
+        `date` keyword argument.
+        '''
+        self.metrics = {}
+        banks = set([t['bank'] for t in transactions])
+        for bank in banks:
+            self.metrics[bank] = {}
+            bt = tfilter(transactions, bank=bank)
+            accounts = set([t['account'] for t in bt])
+            for account in accounts:
+                self.metrics[bank][account] = {}
+                at = tfilter(bt, account=account)
+                self.metrics[bank][account]['zero_date'] = copy.deepcopy(max([t['date'] for t in at]))
+                self.metrics[bank][account]['bal'] = statistics.mean(
+                    [t['bal'] for t in tfilter(at, date=self.metrics[bank][account]['zero_date'])]
+                )
+                if deposits := tfilter(at, amount='+'):
+                    ddates = sorted([t['date'] for t in deposits])
+                    dfreqs = []
+                    for i, d in enumerate(ddates):
+                        if i == 0: continue
+                        dfreqs.append((ddates[i] - ddates[i-1]).days)
+                    self.metrics[bank][account]['deposit_amount_mean']  = statistics.mean([abs(t['amount']) for t in deposits])
+                    self.metrics[bank][account]['deposit_amount_stdev'] = statistics.stdev([abs(t['amount']) for t in deposits])
+                    self.metrics[bank][account]['deposit_freq_mean']    = statistics.mean(dfreqs)
+                    self.metrics[bank][account]['deposit_freq_stdev']   = statistics.stdev(dfreqs)
+                else:
+                    self.metrics[bank][account]['deposit_amount_mean']  = 0.0
+                    self.metrics[bank][account]['deposit_amount_stdev'] = 0.0
+                    self.metrics[bank][account]['deposit_freq_mean']    = 0.0
+                    self.metrics[bank][account]['deposit_freq_stdev']   = 0.0
+                if withdrawals := tfilter(at, amount='-'):
+                    wdates = sorted([t['date'] for t in withdrawals])
+                    wfreqs = []
+                    for i, d in enumerate(wdates):
+                        if i == 0: continue
+                        wfreqs.append((wdates[i] - wdates[i-1]).days)
+                    self.metrics[bank][account]['withdrawal_amount_mean']  = statistics.mean([abs(t['amount']) for t in withdrawals])
+                    self.metrics[bank][account]['withdrawal_amount_stdev'] = statistics.stdev([abs(t['amount']) for t in withdrawals])
+                    self.metrics[bank][account]['withdrawal_freq_mean']    = statistics.mean(wfreqs)
+                    self.metrics[bank][account]['withdrawal_freq_stdev']   = statistics.stdev(wfreqs)
+                else:
+                    self.metrics[bank][account]['withdrawal_amount_mean']  = 0.0
+                    self.metrics[bank][account]['withdrawal_amount_stdev'] = 0.0
+                    self.metrics[bank][account]['withdrawal_freq_mean']    = 0.0
+                    self.metrics[bank][account]['withdrawal_freq_stdev']   = 0.0
+
+    def run(self, days, account_suffix=' - Prediction', max_per_day=3, stdev_mul=0.5):
+        '''
+        Runs the simulation for the specified number of days, returning a list
+        of generated transactions.
+        '''
+        gen = []
+        for bank in self.metrics:
+            for account in self.metrics[bank]:
+                m = self.metrics[bank][account]
+                proto = []
+                current_days = 0
+                number_on_day = 0
+                while m['withdrawal_freq_mean'] > 0 and current_days < days:
+                    dt = -1
+                    while dt < 0:
+                        dt = round(numpy.random.normal(
+                            loc = m['withdrawal_freq_mean'],
+                            scale = m['withdrawal_freq_stdev']
+                        ))
+                    if dt == 0:
+                        if number_on_day >= max_per_day:
+                            continue
+                        else:
+                            number_on_day += 1
+                    else:
+                        number_on_day = 0
+                    amount = 0.0
+                    while amount >= 0:
+                        amount = -1 * round(numpy.random.normal(
+                            loc = m['withdrawal_amount_mean'],
+                            scale = m['withdrawal_amount_stdev'] * stdev_mul
+                        ), 2)
+                    current_days += dt
+                    proto.append({
+                        'account': account + account_suffix,
+                        'amount': amount,
+                        'bal': 0.0,
+                        'bank': bank,
+                        'date': m['zero_date'] + datetime.timedelta(current_days),
+                        'desc': 'Simulated Withdrawal',
+                        'name': 'Simulated Withdrawal',
+                        'tags': ['simulated']
+                    })
+                current_days = 0
+                number_on_day = 0
+                while m['deposit_freq_mean'] > 0 and current_days < days:
+                    dt = -1
+                    while dt < 0:
+                        dt = round(numpy.random.normal(
+                            loc = m['deposit_freq_mean'],
+                            scale = m['deposit_freq_stdev']
+                        ))
+                    if dt == 0:
+                        if number_on_day >= max_per_day:
+                            continue
+                        else:
+                            number_on_day += 1
+                    else:
+                        number_on_day = 0
+                    amount = 0.0
+                    while amount <= 0:
+                        amount = round(numpy.random.normal(
+                            loc = m['deposit_amount_mean'],
+                            scale = m['deposit_amount_stdev'] * stdev_mul
+                        ), 2)
+                    current_days += dt
+                    proto.append({
+                        'account': account + account_suffix,
+                        'amount': amount,
+                        'bal': 0.0,
+                        'bank': bank,
+                        'date': m['zero_date'] + datetime.timedelta(current_days),
+                        'desc': 'Simulated Deposit',
+                        'name': 'Simulated Deposit',
+                        'tags': ['simulated']
+                    })
+                trimmed = []
+                for p in proto:
+                    if (p['date'] - m['zero_date']).days <= days:
+                        trimmed.append(p)
+                current_bal = m['bal']
+                for t in tsort(trimmed, reverse=True):
+                    tc = copy.deepcopy(t)
+                    current_bal += tc['amount']
+                    tc['bal'] = round(current_bal, 2)
+                    gen.append(tc)
+        return tsort(gen)
 
 
 def dstr(amount):
@@ -342,6 +549,8 @@ def tfilter(transactions, account=None, amount=None, bank=None, date=None, desc=
         `withdrawal`, their shorthand forms `d` or `w`, or `+` or `-`.
       * A tuple of integers or floats for the `amount` keyword argument. These
         are taken to constitute a range of amounts (inclusive).
+      * A `datetime.datetime` object for the `date` keyword argument, for which
+        all transactions with the same `.date()` will be kept.
       * An integer for the `date` keyword argument, indicating to filter by the
         `n` most recent days.
       * A date string of the form `%Y`, `%Y/%m`, or `%Y/%m/%d` for the `date`
@@ -524,6 +733,13 @@ def tfilter(transactions, account=None, amount=None, bank=None, date=None, desc=
                         continue
                 else:
                     if t['date'] < lowerbound or t['date'] > upperbound:
+                        continue
+            elif isinstance(date, datetime.datetime):
+                if negate:
+                    if t['date'].date() == date.date():
+                        continue
+                else:
+                    if t['date'].date() != date.date():
                         continue
             else:
                 if negate:
