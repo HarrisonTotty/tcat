@@ -110,7 +110,8 @@ class Categorizer:
         cat = []
         for t in transactions:
             tc = copy.deepcopy(t)
-            if cdesc := self.categorize(t['desc']):
+            cdesc = self.categorize(t['desc'])
+            if cdesc:
                 tc['name'] = cdesc['name']
                 tc['tags'] = cdesc['tags']
             if macro and abs(t['amount']) >= 1000:
@@ -287,7 +288,8 @@ class Simulator:
                 self.metrics[bank][account]['bal'] = statistics.mean(
                     [t['bal'] for t in tfilter(at, date=self.metrics[bank][account]['zero_date'])]
                 )
-                if deposits := tfilter(at, amount='+'):
+                deposits = tfilter(at, amount='+')
+                if deposits:
                     ddates = sorted([t['date'] for t in deposits])
                     dfreqs = []
                     for i, d in enumerate(ddates):
@@ -302,7 +304,8 @@ class Simulator:
                     self.metrics[bank][account]['deposit_amount_stdev'] = 0.0
                     self.metrics[bank][account]['deposit_freq_mean']    = 0.0
                     self.metrics[bank][account]['deposit_freq_stdev']   = 0.0
-                if withdrawals := tfilter(at, amount='-'):
+                withdrawals = tfilter(at, amount='-')
+                if withdrawals:
                     wdates = sorted([t['date'] for t in withdrawals])
                     wfreqs = []
                     for i, d in enumerate(wdates):
