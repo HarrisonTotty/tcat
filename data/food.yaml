@@ -229,6 +229,13 @@ data:
       - "delivery"
       - "fast-food"
 
+  - name: 'Sushi Siam (Grubhub)'
+    match: >-
+        grubhubsushisiam
+    tags:
+      - 'delivery'
+      - 'restaurant'
+
   - name: "Thara Thai (DoorDash)"
     match: >
       doordash\*thara thai
