@@ -104,7 +104,13 @@ data:
     tags:
       - 'outdoors'
 
-  # ----- Video Games -----
+  # ----- Video & Board Games -----
+  - name: 'Larian Studios Purchase'
+    match: >-
+        larian studios
+    tags:
+      - 'video-games'
+
   - name: 'Steam Game Purchase'
     match: >-
       steamgames\.com

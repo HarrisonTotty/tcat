@@ -75,7 +75,7 @@ data:
 
   - name: 'American Airlines'
     match: >-
-      american air
+      (american air)|(american \d+)
     tags:
       - 'flight'
       - 'transportation'
@@ -94,6 +94,13 @@ data:
       - 'bus'
       - 'transportation'
 
+  - name: 'Delta Air Lines Baggage Fee'
+    match: >-
+        delta airbaggage fee
+    tags:
+      - 'flight'
+      - 'transportation'
+
   - name: 'Pentagon City Station (Washington DC)'
     match: >-
       1250 hayes street
@@ -110,7 +117,7 @@ data:
 
   - name: 'Uber'
     match: >-
-      uber trip
+      uber (\*?trip)|(tip)|(technologies)(us)
     tags:
       - 'transportation'
       - 'uber'
@@ -158,9 +165,21 @@ data:
     tags:
       - 'gas'
 
+  - name: 'ExxonMobil (Gas Station)'
+    match: >-
+        exxonmobil
+    tags:
+      - 'gas'
+
   - name: 'Flying J Travel Center (Gas Station)'
     match: >-
       flying j
+    tags:
+      - 'gas'
+
+  - name: 'Freedom Oil (Gas Station)'
+    match: >-
+        freedom oil
     tags:
       - 'gas'
 
@@ -202,13 +221,19 @@ data:
    
   - name: "Love's (Gas Station)"
     match: >-
-      love[' ]?s country
+      love[' ]?s (country)|(travel)
     tags:
       - 'gas'
 
   - name: 'Mach 1 (Gas Station)'
     match: >-
       mach 1
+    tags:
+      - 'gas'
+
+  - name: 'Marathon (Gas Station)'
+    match: >-
+        marathon petro
     tags:
       - 'gas'
 
@@ -230,6 +255,12 @@ data:
     tags:
       - 'gas'
 
+  - name: 'Raceway (Gas Station)'
+    match: >-
+      raceway993
+    tags:
+      - 'gas'
+
   - name: 'S&W Food Mart (Gas Station)'
     match: >-
       s&w food mart
@@ -244,7 +275,7 @@ data:
 
   - name: 'Shell (Gas Station)'
     match: >-
-      (shell service)|(1406 n prospect ave)
+      (shell service)|(1406 n prospect ave)|(shell oil)
     tags:
       - 'gas'
 

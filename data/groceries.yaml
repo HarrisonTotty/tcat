@@ -5,6 +5,12 @@ tags:
   - 'groceries'
 
 data:
+  - name: 'ABC Fine Wine & Spirits'
+    match: >-
+        abc fine wine
+    tags:
+      - 'alcohol'
+ 
   - name: 'CVS Pharmacy'
     match: >-
       cvs/pharm(acy)?
@@ -19,7 +25,15 @@ data:
 
   - name: 'Dollar General'
     match: >-
-      dollar\-general
+      dollar[\- ]general
+
+  - name: 'Dollar Tree'
+    match: >-
+        (dolrtree)|(dollar tree)
+
+  - name: 'Downtown Market'
+    match: >-
+        downtown market
 
   - name: 'Fresh International Market'
     match: >-
@@ -69,7 +83,11 @@ data:
 
   - name: 'Wal-Mart'
     match: >-
-      wal\-?mart
+      (wal\-?mart)|(wm supercenter)
+
+  - name: 'Winn-Dixie'
+    match: >-
+      winn-dixie
 
   - name: 'World Harvest'
     match: >-

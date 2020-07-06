@@ -187,6 +187,12 @@ data:
       - "delivery"
       - "restaurant"
 
+  - name: 'Paris Super Crepes (Grubhub)'
+    match: >-
+        grubhubparissupercrep
+    tags:
+      - 'delivery'
+
   - name: "Popeyes (Grubhub)"
     match: >
       grubhubpopeyes
@@ -347,6 +353,11 @@ data:
     match: >
       bunny[' ]?s tavern
     tags: ["bar"]
+
+  - name: 'Burger King'
+    match: >-
+        burger king
+    tags: ['fast-food']
 
   - name: "Cactus Grill"
     match: >
@@ -517,6 +528,11 @@ data:
       (5|five) ?guys
     tags: ["fast-food"]
 
+  - name: 'Food Court'
+    match: >-
+        food ?court
+    tags: ['fast-food']
+
   - name: "Garcia's Pizza In A Pan"
     match: >-
       garcia'?s pizza in a pan
@@ -535,6 +551,11 @@ data:
   - name: 'Green Jade'
     match: >-
       green jade
+    tags: ['fast-food']
+
+  - name: "Grover's Fingers & Wings"
+    match: >-
+        grover'?s fingers and wi(ngs)?
     tags: ['fast-food']
 
   - name: "Happy Donuts & Breakfast"
@@ -594,6 +615,11 @@ data:
       \s+kfc\s+
     tags: ["fast-food"]
 
+  - name: 'Korean BBQ & More'
+    match: >-
+      korean bbq \& more
+    tags: ['restaurant']
+
   - name: "Krekel's Custard"
     match: >-
       krekel'?s
@@ -624,10 +650,20 @@ data:
       longhorn steak
     tags: ["restaurant"]
 
+  - name: 'Los Compadres Mexican Restaurant'
+    match: >-
+      los compadres
+    tags: ['restaurant']
+
   - name: "Maize Mexican Grill"
     match: >
       maize
     tags: ["restaurant"]
+
+  - name: "Manolo's Pizza & Empanadas"
+    match: >-
+      manolo'?s pizza
+    tags: ['fast-food']
 
   - name: 'Market Creations (Chicago)'
     match: >-
@@ -683,6 +719,11 @@ data:
     match: >
       monical'?s pizza
     tags: ["restaurant"]
+
+  - name: 'Mr. Roboto Tokyo Grill'
+    match: >-
+      mr\.? roboto tokyo grill
+    tags: ['restaurant']
 
   - name: 'Nando Milano'
     match: >-
@@ -753,6 +794,11 @@ data:
     match: >-
       gab term b dca
     tags: ["fast-food"]
+
+  - name: 'The Red Lion'
+    match: >-
+      red lion champaign
+    tags: ['bar']
 
   - name: 'Riggs Beer Company'
     match: >-
@@ -849,6 +895,11 @@ data:
       clark bar
     tags: ["bar"]
 
+  - name: 'The Junction At Monroe'
+    match: >-
+      the junction at monroe
+    tags: ['bar']
+
   - name: "The Original Pancake House"
     match: >
       the original panca
@@ -871,12 +922,17 @@ data:
 
   - name: "Tropical Smoothie"
     match: >
-      tropical smoothie
+      (tropical)|(trpicl) smoothie
     tags: ["fast-food"]
 
   - name: 'Villa Italian Kitchen'
     match: >-
       villa pizza
+    tags: ['fast-food']
+
+  - name: 'Waffle House'
+    match: >-
+      waffle house
     tags: ['fast-food']
 
   - name: "Watson's Shack & Rail"
@@ -889,8 +945,13 @@ data:
       wendy'?s
     tags: ["fast-food"]
 
+  - name: 'Whataburger'
+    match: >-
+      whataburger
+    tags: ['fast-food']
+
   # ----- Vending Machines -----
   - name: 'Vending Machine'
     match: >-
-      (vend llc)|(snack soda vending)|(coca cola)|(mark vend co)|(illini union quad s)
+      (vend llc)|(snack soda vending)|(coca cola)|(mark vend co)|(illini union quad s)|(cmsvend)
     tags: ["vending-machine"]

@@ -12,7 +12,19 @@ data:
 
   - name: 'Amazon Prime Bill'
     match: >-
-      amazon prime
+      (amazon prime)|(amazonprime membership)
+
+  - name: 'Credit Card Membership Fee'
+    match: >-
+        ^annual membership fee
+    tags:
+      - 'credit-card'
+
+  - name: 'Credit Card Payment'
+    match: >-
+      (cardmember serv)|(payment thank you)
+    tags:
+      - 'credit-card'
 
   - name: 'Dollar Shave Club'
     match: >-
@@ -33,6 +45,10 @@ data:
   - name: 'Illinois Secretary of State Vehicle Registration'
     match: >-
       sosinternet vehicle
+
+  - name: 'Property Payment Rent'
+    match: >-
+      property payment rent
 
   - name: "Sam's Club Membership"
     match: >-
@@ -103,6 +119,12 @@ data:
   - name: 'Jones Optical'
     match: >-
       jones optical
+    tags:
+      - 'medical'
+
+  - name: 'Novey Animal Hospital'
+    match: >-
+        novey animal hospital
     tags:
       - 'medical'
 

@@ -14,6 +14,10 @@ data:
     match: >-
       am(erican)? cancer soc
 
+  - name: 'American Chemical Society'
+    match: >-
+      american chemical soci
+
   - name: 'Asbestos Certification'
     match: >-
       iepa as?bestos
@@ -42,11 +46,13 @@ data:
     match: >-
       city of urbana
 
-  - name: 'Credit Card Payment'
+  - name: 'College Transcript'
     match: >-
-      cardmember serv
-    tags:
-      - 'credit-card'
+      college transcript
+
+  - name: 'Experian Credit Report'
+    match: >-
+      experian[\* ]*credit
 
   - name: 'EZ Pay (Money Order Service)'
     match: >-
@@ -238,7 +244,7 @@ data:
 
   - name: "Menard's"
     match: >-
-      mnrd\-cham(paign)?
+      (mnrd\-cham(paign)?)|(menard'?s)
     tags:
       - 'home-improvement'
 
@@ -255,9 +261,15 @@ data:
       - 'home-improvement'
 
   # ----- Online Purchases -----
+  - name: 'Adore Me'
+    match: >-
+        adore ?me
+    tags:
+      - 'online-purchases'
+
   - name: 'Amazon.com Purchase'
     match: >-
-      (amzn mktp)|(amazon\.com)
+      (amzn mktp)|(amazon\.com)|(amazon mktplace)
     tags:
       - 'online-purchases'
 
@@ -267,15 +279,57 @@ data:
     tags:
       - 'online-purchases'
 
+  - name: 'Apple iTunes Purchase'
+    match: >-
+        apple itunes
+    tags:
+      - 'online-purchases'
+
   - name: 'Canakit.com Purchase'
     match: >-
       canakit\.com
     tags:
       - 'online-purchases'
 
+  - name: 'Cards Against Humanity'
+    match: >-
+        cards? against hum(anity)?
+    tags:
+      - 'online-purchases'
+
   - name: "Etsy.com Purchase"
     match: >-
       etsy\.com
+    tags:
+      - 'online-purchases'
+
+  - name: 'EyeBuyDirect'
+    match: >-
+        eyebuydirect
+    tags:
+      - 'online-purchases'
+
+  - name: 'Kickstarter'
+    match: >-
+        kickstarter.com
+    tags:
+      - 'online-purchases'
+
+  - name: 'Kurzgesagt Store Purchase'
+    match: >-
+        kurzgesagt
+    tags:
+      - 'online-purchases'
+
+  - name: 'Lenovo Purchase'
+    match: >-
+        lenovo group
+    tags:
+      - 'online-purchases'
+
+  - name: 'Litter Robot Purchase'
+    match: >-
+        litter robot
     tags:
       - 'online-purchases'
 
