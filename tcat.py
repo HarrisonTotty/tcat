@@ -419,11 +419,14 @@ def dstr(amount):
     return '${0:.2f}'.format(ra)
 
 
-def parse_csv(csv_file, bank=None, account=None):
+def parse_csv(csv_file, bank=None, account=None, credit_card=False):
     '''
     Parses the specified bank CSV file, optionally specifying the bank and
     account the file represents. If the bank and account are not specified, it
     is constructed from the file name assuming the format: BANK-ACCOUNT.csv
+
+    If `credit_card` is set to `True`, then the input CSV file is considered
+    to be a credit card ledger.
 
     Additionally, a directory may instead be provided, in which all `.csv`
     files within it will be parsed and then merged.
@@ -435,7 +438,7 @@ def parse_csv(csv_file, bank=None, account=None):
         csv_files = glob.glob(os.path.join(cf, '*.csv'))
         if not csv_files:
             raise Exception('specified csv directory does not contain any data files')
-        return tmerge(*[parse_csv(f) for f in csv_files])
+        return tmerge(*[parse_csv(f, bank, account, credit_card) for f in csv_files])
     if not os.path.isfile(cf):
         raise Exception('specified csv file does not exist')
     cname = os.path.basename(csv_file).split('.', 1)[0]
@@ -455,28 +458,44 @@ def parse_csv(csv_file, bank=None, account=None):
     with open(cf, 'r') as f:
         init_parse = [x for x in csv.DictReader(f)]
     parsed = []
-    if the_bank.lower() == 'alliant':
-        for d in init_parse:
-            parsed.append({
-                'account': the_account,
-                'amount': parse_dstr(d['Amount']),
-                'bal': parse_dstr(d['Balance']),
-                'bank': the_bank,
-                'date': datetime.datetime.strptime(d['Date'], '%m/%d/%Y'),
-                'desc': d['Description'].replace('&#39;', "'").replace('&amp;', '&'),
-                'tags': []
-            })
-    elif the_bank.lower() == 'eglin':
-        for d in init_parse:
-            parsed.append({
-                'account': the_account,
-                'amount': parse_dstr(d['Amount']),
-                'bal': parse_dstr(d['Balance']),
-                'bank': the_bank,
-                'date': datetime.datetime.strptime(d['Date'], '%m/%d/%Y'),
-                'desc': d['Description'],
-                'tags': []
-            })
+    if not credit_card:
+        if the_bank.lower() == 'alliant':
+            for d in init_parse:
+                parsed.append({
+                    'account': the_account,
+                    'amount': parse_dstr(d['Amount']),
+                    'bal': parse_dstr(d['Balance']),
+                    'bank': the_bank,
+                    'date': datetime.datetime.strptime(d['Date'], '%m/%d/%Y'),
+                    'desc': d['Description'].replace('&#39;', "'").replace('&amp;', '&'),
+                    'tags': []
+                })
+        elif the_bank.lower() == 'eglin':
+            for d in init_parse:
+                parsed.append({
+                    'account': the_account,
+                    'amount': parse_dstr(d['Amount']),
+                    'bal': parse_dstr(d['Balance']),
+                    'bank': the_bank,
+                    'date': datetime.datetime.strptime(d['Date'], '%m/%d/%Y'),
+                    'desc': d['Description'],
+                    'tags': []
+                })
+    else:
+        running_balance = 0.0
+        if the_bank.lower() == 'usbank':
+            for d in init_parse:
+                d_amount = parse_dstr(d['Amount'])
+                running_balance = round(running_balance + d_amount, 2)
+                parsed.append({
+                    'account': the_account,
+                    'amount': d_amount,
+                    'bal': running_balance,
+                    'bank': the_bank,
+                    'date': datetime.datetime.strptime(d['Date'], '%m/%d/%Y'),
+                    'desc': d['Name'] + d['Memo'],
+                    'tags': []
+                })
     return parsed
 
 
