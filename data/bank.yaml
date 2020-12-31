@@ -60,12 +60,26 @@ data:
     tags:
       - 'xfer'
 
+  - name: "Transfer: From Savings (Harrison's Schooling)"
+    match: >-
+      from share 21
+    tags:
+      - 'xfer'
+      - 'xfer-savings'
+
   - name: 'Transfer: From Savings (Remote Car Starter)'
     match: >-
       from share 22
     tags:
       - 'xfer'
       - 'xfer-savings'
+
+  - name: 'Transfer: To Checking'
+    match: >-
+      (to share 40)
+    tags:
+      - 'xfer'
+      - 'xfer-checking'
 
   - name: 'Transfer: To Savings'
     match: >-

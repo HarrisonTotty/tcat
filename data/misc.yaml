@@ -74,6 +74,10 @@ data:
     match: >-
       hans[eo]n & co
 
+  - name: 'Illinois Department of Revenue'
+    match: >-
+      il ?dept ?of ?reven
+
   - name: 'Illinois Secretary of State'
     match: >-
       ilsecretaryofst
@@ -338,6 +342,12 @@ data:
       no starch press
     tags:
       - 'books'
+      - 'online-purchases'
+
+  - name: 'PamFax (Online Faxing Website)'
+    match: >-
+      pamconsult ?softw
+    tags:
       - 'online-purchases'
 
   - name: 'Paypal'

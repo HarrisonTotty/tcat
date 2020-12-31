@@ -22,6 +22,12 @@ data:
       amex epayment
     tags:
       - 'business-purchases'
+
+  - name: 'University of Illinois (Salary)'
+    match: >-
+      university of il.*payroll id
+    tags:
+      - 'income'
    
   - name: 'Wolfram Research Inc.'
     match: >-

@@ -5,6 +5,13 @@ tags:
 
 data:
   # ----- Grubhub & Door-Dash Varients -----
+  - name: "Ambar India (DoorDash)"
+    match: >
+      doordash.*am(ab|ba)r ?india
+    tags:
+      - "delivery"
+      - "restaurant"
+
   - name: "Ambar India (Grubhub)"
     match: >
       grubhub\*?ambarindia
@@ -103,12 +110,26 @@ data:
       - 'delivery'
       - 'fast-food'
 
+  - name: 'Four Breakfast & More (Grubhub)'
+    match: >-
+      grubhubfourbreakfast
+    tags:
+      - 'delivery'
+      - 'restaurant'
+
   - name: "Hooters (DoorDash)"
     match: >
       doordash\*hooters
     tags:
       - "delivery"
       - "restaurant"
+
+  - name: 'Insomnia Cookies (Grubhub)'
+    match: >-
+      grubhubinsomniacookie
+    tags:
+      - 'delivery'
+      - 'dessert'
 
   - name: "Kentucky Fried Chicken (Grubhub)"
     match: >
@@ -207,10 +228,17 @@ data:
       - 'delivery'
       - 'fast-food'
 
+  - name: 'Sakanaya (Grubhub)'
+    match: >-
+      grubhubsakanaya
+    tags:
+      - 'delivery'
+      - 'restaurant'
+
   - name: 'Siam Terrace (Grubhub)'
     match: >-
       grubhubsiamterrace
-    tags: >-
+    tags:
       - 'delivery'
       - 'restaurant'
 
@@ -224,6 +252,13 @@ data:
   - name: 'Spoon House (DoorDash)'
     match: >-
       doordash\*spoon house
+    tags:
+      - 'delivery'
+      - 'restaurant'
+
+  - name: 'Stango Cuisine (Grubhub)'
+    match: >-
+      grubhubstangocuisine
     tags:
       - 'delivery'
       - 'restaurant'
@@ -327,6 +362,11 @@ data:
   - name: "Biaggi's Ristorante Italiano"
     match: >-
       biaggi'?s
+    tags: ['restaurant']
+
+  - name: 'Billy Barooz Pub & Grill'
+    match: >-
+      billy ?barooz
     tags: ['restaurant']
 
   - name: "BJ's Restaurant"

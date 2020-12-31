@@ -110,6 +110,12 @@ data:
     tags:
       - 'medical'
 
+  - name: 'Dentist Appointment'
+    match: >-
+      dentist
+    tags:
+      - 'medical'
+
   - name: 'Evergreen Coaching & Counseling'
     match: >-
       evergreen coaching
