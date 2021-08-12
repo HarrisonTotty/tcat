@@ -1,5 +1,5 @@
-# .gitignore file
-# ---------------
+# .dockerignore file
+# ------------------
 
 .DS_Store
 .idea
@@ -12,8 +12,7 @@ build
 htmlcov
 
 dist/
-private/
 
 .coverage
-.mypy_cache
 .pytest_cache
+.mypy_cache
