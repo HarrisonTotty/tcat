@@ -1,6 +1,25 @@
-FROM python:3.9 as poetry
+FROM jupyter/datascience-notebook:latest as jupyter
 
-MAINTAINER Harrison Totty <harrisongtotty@gmail.com>
+ENV JUPYTER_ENABLE_LAB=yes \
+    PIP_DISABLE_PIP_VERSION_CHECK=on \
+    PIP_NO_CACHE_DIR=false
+
+RUN pip install \
+    jupyter-dash \
+    jupyter-lsp \
+    plotly \
+    python-language-server[all]
+
+RUN jupyter labextension install \
+    @aquirdturtle/collapsible_headings \
+    @ijmbarr/jupyterlab_spellchecker \
+    @jupyter-widgets/jupyterlab-manager \
+    @krassowski/jupyterlab-lsp \
+    jupyterlab-plotly \
+    plotlywidget
+
+
+FROM python:3.9 as poetry
 
 ENV PIP_DISABLE_PIP_VERSION_CHECK=on \
     PIP_NO_CACHE_DIR=false \
@@ -39,4 +58,10 @@ RUN poetry install --no-ansi --no-interaction --no-root && \
     pytest
 
 
-FROM build as release
+FROM jupyter as run
+
+WORKDIR /home/jovyan
+
+COPY --from=build /project/dist .
+
+RUN pip install *.whl

@@ -22,11 +22,16 @@ description = "A python library for analyzing my personal finances."
 name        = "tcat"
 readme      = "README.md"
 repository  = "https://github.com/HarrisonTotty/tcat"
-version     = "0.1.0"
+version     = "2.0.0"
 include     = ["src/tcat/*.yaml"]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+numpy           = "*"
+pandas          = "*"
+plotly          = "*"
+python          = "^3.9"
+python-dateutil = "*"
+pyyaml          = "*"
 
 [tool.poetry.dev-dependencies]
 mypy            = "*"
@@ -36,7 +41,7 @@ pytest-cov      = "*"
 pytest-randomly = "*"
 
 [tool.pytest.ini_options]
-addopts          = "--cov=tcat"
+addopts          = "-v --cov=tcat"
 python_files     = "*.py"
 python_functions = "test_*"
 testpaths        = "tests"

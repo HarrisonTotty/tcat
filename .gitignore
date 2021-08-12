@@ -12,3 +12,8 @@ build
 htmlcov
 
 dist/
+private/
+
+.coverage
+.mypy_cache
+.pytest_cache
