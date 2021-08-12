@@ -824,31 +824,6 @@ class Transactions:
             ts.append(t.to_datestr_dict())
         return json.dumps(ts)
 
-    def to_structured_dict(self) -> dict[str, dict]:
-        '''
-        Converts this collection of transactions into a structured dictionary of
-        the form:
-        bank.account.date.[amounts, balances, descs, names, tags]
-
-        for example:
-        {
-          'bank1': {
-            'checking': {
-              date(2020, 04, 03): {
-                'amounts': [1.23, -9.65, 8.33],
-                'balances': [100.000, 90.35, 98.68]
-                # ...
-              }
-            },
-            'savings': {
-              # ...
-            }
-          }
-        }
-        '''
-        raise NotImplementedError()
-
-
     def total_amount(self, absolute_value: bool = False) -> float:
         '''
         Returns the total (sum) of amounts in this collection.
