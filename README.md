@@ -176,6 +176,8 @@ data:
       - 'subs'
  ```
 
+Note that matching is done against the _lowercase_ form of the `desc` field.
+
 To ingest these files, one instantiates a `Categorizer` object pointing at the
 directory containing them, combined with the `Parser` object explained above,
 one might write the following:
