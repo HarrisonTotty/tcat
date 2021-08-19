@@ -4,6 +4,7 @@ Contains the definition of a transaction CSV parser.
 
 import csv
 import datetime
+import dateutil.parser as dp
 import glob
 import io
 import os
@@ -12,8 +13,6 @@ import re
 from typing import Any, Optional
 
 from .transaction import Transaction, Transactions
-
-YEAR_FIRST_REGEX = re.compile(r'^\d{4}\/\d{1,2}\/\d{1,2}$')
 
 class Parser:
     '''
@@ -79,13 +78,13 @@ class Parser:
         transaction_sets = []
         for p in paths:
             if card_name is None and card_issuer is None:
-                the_card_issuer, the_card_name = os.path.basename(p).rsplit('.', 1)[0].split('-', 1)
+                the_card_issuer, the_card_name = [s.strip() for s in os.path.basename(p).rsplit('.', 1)[0].split('-', 1)]
             elif card_name is None and not card_issuer is None:
-                the_card_name = os.path.basename(p).rsplit('.', 1)[0]
+                the_card_name = os.path.basename(p).rsplit('.', 1)[0].strip()
                 the_card_issuer = card_issuer
             elif not card_name is None and card_issuer is None:
                 the_card_name = card_name
-                the_card_issuer = os.path.basename(p).rsplit('.', 1)[0]
+                the_card_issuer = os.path.basename(p).rsplit('.', 1)[0].strip()
             else:
                 the_card_name = card_name
                 the_card_issuer = card_issuer
@@ -143,15 +142,11 @@ class Parser:
                 note = f'Additional CSV Data: {entry["misc"]}'
             else:
                 note = None
-            if YEAR_FIRST_REGEX.match(date_str):
-                year_format = '%Y/%m/%d'
-            else:
-                year_format = '%m/%d/%Y'
             tdata.append({
                 'account': card_name,
                 'amount': Parser.amount_from_str(amount_str),
                 'bank': card_issuer,
-                'date': datetime.datetime.strptime(date_str, year_format).date(),
+                'date': dp.parse(date_str).date(),
                 'desc': desc,
                 'note': note
             })
@@ -190,13 +185,13 @@ class Parser:
         transaction_sets = []
         for p in paths:
             if account is None and bank is None:
-                the_bank, the_account = os.path.basename(p).rsplit('.', 1)[0].split('-', 1)
+                the_bank, the_account = [s.strip() for s in os.path.basename(p).rsplit('.', 1)[0].split('-', 1)]
             elif account is None and not bank is None:
-                the_account = os.path.basename(p).rsplit('.', 1)[0]
+                the_account = os.path.basename(p).rsplit('.', 1)[0].strip()
                 the_bank = bank
             elif not account is None and bank is None:
                 the_account = account
-                the_bank = os.path.basename(p).rsplit('.', 1)[0]
+                the_bank = os.path.basename(p).rsplit('.', 1)[0].strip()
             else:
                 the_account = account
                 the_bank = bank
@@ -232,16 +227,12 @@ class Parser:
                 note = f'Additional CSV Data: {entry["misc"]}'
             else:
                 note = None
-            if YEAR_FIRST_REGEX.match(date_str):
-                year_format = '%Y/%m/%d'
-            else:
-                year_format = '%m/%d/%Y'
             transactions.append(Transaction(
                 account = account,
                 amount  = Parser.amount_from_str(amount_str),
                 balance = Parser.amount_from_str(balance_str),
                 bank    = bank,
-                date    = datetime.datetime.strptime(date_str, year_format).date(),
+                date    = dp.parse(date_str).date(),
                 desc    = desc,
                 note    = note
             ))
