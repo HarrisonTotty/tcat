@@ -144,6 +144,7 @@ def statistic_plot(
         An optional title for the plot.
     '''
     fig = go.Figure()
+    num_traces = 0
     for (bank, account), account_trans in transactions.group(by=f'bank-account').items():
         by_date = account_trans.group(by=f'date-{scale}')
         dates = [d[0] for d in by_date]
@@ -156,8 +157,9 @@ def statistic_plot(
             x         = dates,
             y         = [s[statistic] for s in stats]
         ))
+        num_traces += 1
     fig.update_layout(
-        showlegend  = True,
+        showlegend  = len(num_traces) > 1,
         title       = title,
         xaxis_title = 'Date',
         yaxis_title = STAT_TITLE[statistic]
