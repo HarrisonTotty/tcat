@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Runs an instance of the tcat jupyter environment image.
+# Runs an instance of the tcat Jupyter Lab environment image.
 
 set -e
 trap 'exit 100' INT
@@ -11,13 +11,6 @@ if [ "$#" -ne 1 ]; then
 fi
 
 working_dir="$1"
-
-if [ ! -f Dockerfile ]; then
-    echo 'Please execute this script within the too directory of the tcat repository.'
-    exit 1
-fi
-
-docker build -t tcatenv:latest .
 
 docker run \
     --rm \

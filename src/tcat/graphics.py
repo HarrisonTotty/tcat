@@ -13,26 +13,45 @@ from typing import Any, Optional
 
 from .transaction import Transaction, Transactions
 
-
-STATFUNC = {
-    'max': max,
-    'mean': statistics.mean,
-    'median': statistics.median,
-    'min': min,
-    'stdev': statistics.stdev,
-    'sum': sum,
-    'total': sum
+STAT_TITLE = {
+    'count': 'Number of Transactions',
+    'max_abs_amount': 'Maximum Absolute Transaction Amount ($)',
+    'max_abs_balance': 'Maximum Absolute Account Balance ($)',
+    'max_amount': 'Maximum Transaction Amount ($)',
+    'max_balance': 'Maximum Account Balance ($)',
+    'mean_abs_amount': 'Mean Absolute Transaction Amount ($)',
+    'mean_abs_balance': 'Mean Absolute Account Balance ($)',
+    'mean_amount': 'Mean Transaction Amount ($)',
+    'mean_balance': 'Mean Transaction Balance ($)',
+    'mean_freq_daily': 'Mean Transaction Frequency (per day)',
+    'mean_freq_monthly': 'Mean Transaction Frequency (per month)',
+    'mean_freq_weekly': 'Mean Transaction Frequency (per week)',
+    'mean_freq_yearly': 'Mean Transaction Frequency (per year)',
+    'median_abs_amount': 'Median Absolute Transaction Amount ($)',
+    'median_abs_balance': 'Median Absolute Account Balance ($)',
+    'median_amount': 'Median Transaction Amount ($)',
+    'median_balance': 'Median Account Balance ($)',
+    'median_freq_daily': 'Mean Transaction Frequency (per day)',
+    'median_freq_monthly': 'Median Transaction Frequency (per month)',
+    'median_freq_weekly': 'Median Transaction Frequency (per week)',
+    'median_freq_yearly': 'Median Transaction Frequency (per year)',
+    'min_abs_amount': 'Minimum Absolute Transaction Amount ($)',
+    'min_abs_balance': 'Minimum Absolute Account Balance ($)',
+    'min_amount': 'Minimum Transaction Amount ($)',
+    'min_balance': 'Minimum Account Balance ($)',
+    'stdev_abs_amount': 'Standard Deviation of Absolute Transaction Amount ($)',
+    'stdev_abs_balance': 'Standard Deviation of Absolute Account Balance ($)',
+    'stdev_amount': 'Standard Deviation of Transaction Amount ($)',
+    'stdev_balance': 'Standard Deviation of Account Balance ($)',
+    'stdev_freq_daily': 'Standard Deviation Transaction Frequency (per day)',
+    'stdev_freq_monthly': 'Standard Deviation Transaction Frequency (per month)',
+    'stdev_freq_weekly': 'Standard Deviation Transaction Frequency (per week)',
+    'stdev_freq_yearly': 'Standard Deviation Transaction Frequency (per year)',
+    'total_abs_amount': 'Total Absolute Transaction Amount ($)',
+    'total_abs_balance': 'Total Absolute Account Balance ($)',
+    'total_amount': 'Total Transaction Amount ($)',
+    'total_balance': 'Total Account Balance ($)',
 }
-STATFUNC_NAME = {
-    'max': 'Maximum',
-    'mean': 'Mean',
-    'median': 'Median',
-    'min': 'Minimum',
-    'stdev': 'Standard Deviation',
-    'sum': 'Total',
-    'total': 'Total'
-}
-
 
 def balance_plot(
     transactions: Transactions,
@@ -49,55 +68,48 @@ def balance_plot(
         The plotting style, being `lines`, `markers`, or `lines+markers`.
       * title
         The title string of the plot.
+    This function is just a convenient wrapper around `statistic_plot()`.
     '''
-    fig = go.Figure()
-    for (bank, account), this_account in transactions.group(by='bank-account').items():
-        by_date = this_account.group(by='date-daily')
-        dates = [d[0] for d in by_date]
-        if median:
-            balances = [by_date[d].median_balance() for d in by_date]
-        else:
-            balances = [by_date[d].mean_balance() for d in by_date]
-        hovertexts = [by_date[d].hovertext() for d in by_date]
-        fig.add_trace(go.Scatter(
-            hovertext = hovertexts,
-            mode = style,
-            name = f'{bank} ({account})',
-            x = dates,
-            y = balances
-        ))
-    fig.update_layout(
-        showlegend = True,
-        title = title,
-        xaxis_title = 'Date',
-        yaxis_title = 'Median Account Balance ($)' if median else 'Mean Account Balance ($)'
+    return statistic_plot(
+        transactions,
+        statistic = 'median_balance' if median else 'mean_balance',
+        scale = 'daily',
+        style = style,
+        title = title
     )
-    return fig
-
 
 def balance_candle_plot(
     transactions: Transactions,
     bank: str,
     account: str,
+    scale: str = 'monthly',
     title: Optional[str] = 'Transaction Balance Candle Plot') -> Any:
     '''
     Produces a graphical plot of account balance over time, in a candle plot
     format for a single bank/account pair. Accepts the following arguments:
-    * account
-      The account string to restrict the plot to. If left as none, the function
-      will ensu
-    * bank
-      The bank string to restrict the plot to.
-    * title
-      The title string of the plot.
+      * account
+        The account string to restrict the plot to.
+      * bank
+        The bank string to restrict the plot to.
+      * scale
+        The scale to group each candle box, being `daily`, `weekly`, `monthly`, or
+        `yearly`.
+      * title
+        The title string of the plot.
+    A candlestick chart encloses the following bits of information:
+      * "low" is the minimum balance within the time range.
+      * "high" is the maximum balance within the time range.
+      * "open" is the balance before the first transaction within the time
+        range.
+      * "close" is the balance after the last transaction within the time range.
     '''
     fig = go.Figure()
-    by_date = transactions.filter(account=account, bank=bank).group(by='date-daily')
+    by_date = transactions.filter(account=account, bank=bank).group(by=f'date-{scale}')
     dates  = [d[0] for d in by_date]
-    vclose = [round(by_date[d].mean_balance() - by_date[d].stdev_balance(), 2) for d in by_date]
+    vclose = [by_date[d][-1].balance for d in by_date]
     vhigh  = [by_date[d].max_balance() for d in by_date]
     vlow   = [by_date[d].min_balance() for d in by_date]
-    vopen  = [round(by_date[d].mean_balance() + by_date[d].stdev_balance(), 2) for d in by_date]
+    vopen  = [round(by_date[d][0].balance - by_date[d][0].amount, 2) for d in by_date]
     fig.add_trace(go.Candlestick(
         close = vclose,
         high = vhigh,
@@ -112,35 +124,75 @@ def balance_candle_plot(
     )
     return fig
 
+def statistic_plot(
+    transactions: Transactions,
+    statistic: str = 'median_balance',
+    scale: str = 'daily',
+    style: str = 'lines',
+    title: Optional[str] = None) -> Any:
+    '''
+    Produces a graphical plot of the specified statistic over time. The
+    specified statistic may be any key returned from the
+    `Transactions.statistics()` method.
+    Accepts the following arguments:
+      * statistic
+        The specified statistic to plot on the y-axis.
+      * scale
+        The range of dates associated with each data point. May be specified as
+        `daily`, `weekly`, `monthly`, or `yearly`.#!/usr/bin/env python
+      * title
+        An optional title for the plot.
+    '''
+    fig = go.Figure()
+    for (bank, account), account_trans in transactions.group(by=f'bank-account').items():
+        by_date = account_trans.group(by=f'date-{scale}')
+        dates = [d[0] for d in by_date]
+        stats = [by_date[d].statistics() for d in by_date]
+        hovertexts = [by_date[d].hovertext() for d in by_date]
+        fig.add_trace(go.Scatter(
+            hovertext = hovertexts,
+            mode      = style,
+            name      = f'{bank} ({account})',
+            x         = dates,
+            y         = [s[statistic] for s in stats]
+        ))
+    fig.update_layout(
+        showlegend  = True,
+        title       = title,
+        xaxis_title = 'Date',
+        yaxis_title = STAT_TITLE[statistic]
+    )
+    return fig
 
 def tag_histogram(
     transactions: Transactions,
     hide: list[str] = [],
-    statistic: str = 'median',
+    statistic: str = 'median_abs_amount',
     title: Optional[str] = 'Tag Histogram') -> Any:
     '''
     Produces a histogram of tags and their median (or mean) transaction amounts.
     Accepts the following arguments:
-    * hide
-      A list of tags to visually exclude from the histogram.
-    * statistic
-      Specifies the statistic to be applied to each collection of tag amounts.
-      May be one of `max`, `mean`, `median`, `min`, `stdev`, or `sum`/`total`.
-    * title
-      The title of the plot.
+      * hide
+        A list of tags to visually exclude from the histogram.
+      * statistic
+        Specifies the statistic to be applied to each collection of tag amounts.
+        May be one of any key returned by the `Transactions.statistics()`
+        method.
+      * title
+        The title of the plot.
     '''
     fig = go.Figure()
     tags = [tag for tag in transactions.tags() if not tag in hide]
-    values = [STATFUNC[statistic]([abs(t.amount) for t in transactions.filter(tags=tag)]) for tag in tags]
+    stats = [transactions.filter(tags=tag).statistics() for tag in tags]
     fig.add_trace(go.Bar(
         x = tags,
-        y = values
+        y = [v[statistic] for v in stats]
     ))
     fig.update_layout(
         title = title,
         xaxis_tickangle = -45,
         xaxis_title     = 'Tag',
-        yaxis_title     = f'{STATFUNC_NAME[statistic]} Transaction Amount ($)'
+        yaxis_title     = STAT_TITLE[statistic]
     )
     return fig
 
@@ -153,12 +205,13 @@ def tag_distribution_plot(
     Produces a layered histgram of tags and their amount distributions. Note
     that the amount of a transaction is taken to be the absolute value of
     itself. Accepts the following arguments:
-    * bin_size
-      Specifies the delta amount spread within each histogram bin of a tag's
-      associated amounts. If not specified, each histogram will have a different
-      bin size calculated by dividing their standard deviation by 10.
-    * title
-      The title of the distribution plot.
+      * bin_size
+        Specifies the delta amount spread within each histogram bin of a tag's
+        associated amounts. If not specified, each histogram will have a
+        different bin size calculated by dividing their standard deviation by
+        10.
+      * title
+        The title of the distribution plot.
     '''
     tags = transactions.tags()
     amounts = [[abs(t.amount) for t in transactions.filter(tags=tag)] for tag in tags]
@@ -182,22 +235,86 @@ def tag_distribution_plot(
 
 def tag_pie_chart(
     transactions: Transactions,
-    statistic: str = 'total',
+    hide: list[str] = [],
+    show: list[str] = [],
+    statistic: str = 'total_abs_amount',
     title: Optional[str] = 'Tag Pie Chart') -> Any:
     '''
     Produces a pie chart comparing the specified statistic over tags.
     Accepts the following arguments:
-    * statistic
-      The statistical function to use as the comparison basis. Can be one of
-      `max`, `mean`, `median`, `min`, `stdev`, or `sum`/`total`.
-    * title
-      The title of the plot.
+      * hide
+        Hides the specified tags from being displayed from the pie chart.
+      * show
+        Limits the displayed tags to the specified collection of tags.
+      * statistic
+        The statistical function to use as the comparison basis. Can be any key
+        from the `Transactions.statistics()` method.
+      * title
+        The title of the plot.
     '''
-    tags = transactions.tags()
-    amounts = [STATFUNC[statistic]([abs(t.amount) for t in transactions.filter(tags=tag)]) for tag in tags]
+    tags = []
+    for tag in transactions.tags():
+        if show and not tag in show: continue
+        if hide and tag in hide: continue
+        tags.append(tag)
+    stats = [transactions.filter(tags=tag).statistics() for tag in tags]
     fig = go.Figure(data=[go.Pie(
         labels = tags,
-        values = amounts
+        values = [s[statistic] for s in stats]
     )])
     fig.update_layout(title=title)
+    return fig
+
+
+def tag_trend_plot(
+    transactions: Transactions,
+    hide: list[str] = [],
+    scale: str = 'weekly',
+    show: list[str] = [],
+    statistic: str = 'total_abs_amount',
+    style: str = 'lines',
+    title: Optional[str] = 'Tag Trend Plot') -> Any:
+    '''
+    Produces a plot describing the evolution of the specified statistic for each
+    tag.
+    Accepts the following arguments:
+      * hide
+        Hides the specified tags from being displayed on the plot.
+      * scale
+        Specifies the scale at which the specified statistic will be applied.
+        May be set to `daily`, `weekly`, `monthly`, or `yearly`.
+      * show
+        Limits the displayed tags to the specified list of tags.
+      * statistic
+        The statistic to plot on the y-axis of the plot. May be any key provided
+        by the `Transactions.statistics()` method.
+      * style
+        The plotting style to use, being `lines`, `markers`, or `lines+markers`.
+      * title
+        Sets the title of the plot to the specified string.
+    '''
+    fig = go.Figure()
+    tags = []
+    for tag in transactions.tags():
+        if hide and tag in hide: continue
+        if show and not tag in show: continue
+        tags.append(tag)
+    for tag in tags:
+        by_date = transactions.filter(tags=tag).group(by=f'date-{scale}')
+        dates = [d[0] for d in by_date]
+        stats = [by_date[d].statistics() for d in by_date]
+        hovertexts = [by_date[d].hovertext() for d in by_date]
+        fig.add_trace(go.Scatter(
+            hovertext = hovertexts,
+            mode      = style,
+            name      = tag,
+            x         = dates,
+            y         = [s[statistic] for s in stats]
+        ))
+    fig.update_layout(
+        showlegend  = True,
+        title       = title,
+        xaxis_title = 'Date',
+        yaxis_title = STAT_TITLE[statistic]
+    )
     return fig

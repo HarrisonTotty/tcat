@@ -198,7 +198,7 @@ def test_transactions_grouping():
         (-15.0, 35.0): Transactions([T3, T1, T2])
     }
     assert balance == {
-        (-17.0, 83.0): Transactions([T3, T4, T1]),
+        (-17.0, 83.0): Transactions([T3, T1, T4]),
         (883.0, 983.0): Transactions([T2])
     }
     assert bank_account == {

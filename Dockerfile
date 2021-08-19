@@ -53,6 +53,8 @@ RUN poetry install \
 
 FROM build as test
 
+ENV MYPY_CACHE_DIR=/tmp/mypy-cache
+
 RUN poetry install --no-ansi --no-interaction --no-root && \
     mypy --install-types --non-interactive && \
     pytest

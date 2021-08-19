@@ -13,6 +13,9 @@ htmlcov
 
 dist/
 
+__pycache__/
+
+.git
 .coverage
 .pytest_cache
 .mypy_cache

@@ -12,6 +12,7 @@ import dateutil.rrule
 import json
 import math
 import numpy
+import os
 import statistics
 from typing import Any, Optional, Union
 
@@ -21,7 +22,27 @@ DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 @dataclasses.dataclass
 class Transaction:
     '''
-    Represents a particular transaction.
+    Represents a particular bank transaction. Such a transaction has the
+    following fields:
+      * account
+        The account to which this particular transaction belongs (example:
+        "savings").
+      * amount
+        The dollar amount associated with the transaction.
+      * balance
+        The current account balance after the application of the transaction.
+      * bank
+        The financial institution associated with the transaction.
+      * date
+        The post date of the transaction.
+      * desc
+        The raw string description associated with the transaction.
+      * name
+        A human-readable name associated with the transaction, if categorized.
+      * note
+        An arbitrary string for storing notes about the transaction.
+      * tags
+        A list of strings used to broadly categorize the transaction.
     '''
 
     account: str
@@ -74,6 +95,7 @@ class Transaction:
         date strings.
         '''
         rep = copy.deepcopy(jsondict)
+        if 'bal' in rep: rep['balance'] = rep.pop('bal')
         rep['date'] = datetime.datetime.strptime(rep['date'], DATE_FORMAT).date()
         return Transaction(**rep)
 
@@ -446,7 +468,7 @@ class Transactions:
         if by == 'bank-account':
             for bank in self.banks():
                 for account in self.accounts(bank):
-                    res[(bank, account)] = Transactions([t for t in items if t.bank == bank and t.account == account])
+                    res[(bank, account)] = Transactions([t for t in items if t.bank == bank and t.account == account]).sort()
         elif by.startswith('date-'):
             freq = {
                 'date-daily': (dateutil.rrule.DAILY, items[0].date, dateutil.relativedelta.relativedelta(days=1)),
@@ -466,7 +488,7 @@ class Transactions:
                 selected_items = [t for t in items if t.date >= lower and t.date < upper]
                 if not include_empty and not selected_items: continue
                 for t in selected_items: items.remove(t)
-                res[(lower, upper)] = Transactions(selected_items)
+                res[(lower, upper)] = Transactions(selected_items).sort()
         elif by == 'amount':
             for rl in numpy.arange(math.floor(items[0].amount), math.ceil(items[-1].amount) + drange + 2.0, float(drange)):
                 lower = round(rl, 2)
@@ -474,7 +496,7 @@ class Transactions:
                 selected_items = [t for t in items if t.amount >= lower and t.amount < upper]
                 if not include_empty and not selected_items: continue
                 for t in selected_items: items.remove(t)
-                res[(lower, upper)] = Transactions(selected_items)
+                res[(lower, upper)] = Transactions(selected_items).sort()
         elif by == 'balance':
             for rl in numpy.arange(math.floor(items[0].balance), math.ceil(items[-1].balance) + drange + 2.0, float(drange)):
                 lower = round(rl, 2)
@@ -482,15 +504,15 @@ class Transactions:
                 selected_items = [t for t in items if t.balance >= lower and t.balance < upper]
                 if not include_empty and not selected_items: continue
                 for t in selected_items: items.remove(t)
-                res[(lower, upper)] = Transactions(selected_items)
+                res[(lower, upper)] = Transactions(selected_items).sort()
         elif by == 'desc':
             for desc in self.descs():
-                res[desc] = Transactions([t for t in items if t.desc == desc])
+                res[desc] = Transactions([t for t in items if t.desc == desc]).sort()
         elif by == 'name':
             for name in self.names():
-                res[name] = Transactions([t for t in items if t.name == name])
+                res[name] = Transactions([t for t in items if t.name == name]).sort()
             if include_empty:
-                res[None] = Transactions([t for t in items if not t.is_named()])
+                res[None] = Transactions([t for t in items if not t.is_named()]).sort()
         elif by == 'tags':
             collections = {}
             for i in items:
@@ -504,7 +526,7 @@ class Transactions:
                     collections[tags] = [i]
                 else:
                     collections[tags].append(i)
-            res = {k: Transactions(v) for k, v in collections.items()}
+            res = {k: Transactions(v).sort() for k, v in collections.items()}
         return res
 
     def hovertext(self, pkey: str = 'name', skey: Optional[str] = 'amount') -> str:
@@ -526,6 +548,15 @@ class Transactions:
                 else:
                     tstr = f'{tstr} (?)'
             htarray.append(tstr)
+        if len(htarray) > 4:
+            remaining = len(htarray) - 3
+            new_htarray = [
+                htarray[0],
+                htarray[1],
+                htarray[2],
+                f'(+{remaining} more...)'
+            ]
+            htarray = new_htarray
         return ' | '.join(htarray)
 
     @staticmethod
@@ -533,7 +564,7 @@ class Transactions:
         '''
         Loads a list of transactions from the specified file path.
         '''
-        with open(file_path, 'r') as f:
+        with open(os.path.expanduser(file_path), 'r') as f:
             return Transactions.from_json(f.read())
 
     def max_amount(self, absolute_value: bool = False) -> Optional[float]:
@@ -690,7 +721,7 @@ class Transactions:
         '''
         Saves the list of transactions to the specified file path.
         '''
-        with open(file_path, 'w') as f:
+        with open(os.path.expanduser(file_path), 'w') as f:
             f.write(self.to_json())
 
     def sort(self, key: Any = 'date', reverse: bool = False) -> Transactions:

@@ -56,6 +56,15 @@ class Simulator:
                     'zero_date': ts[-1].date
                 }
 
+    def multi_run(self, n: int, days: int) -> Transactions:
+        '''
+        Executes `n` simulator runs each with the specified number of days.
+        '''
+        res = []
+        for i in range(n):
+            res.extend(self.run(days, account_suffix = f' - Prediction {i + 1}').items)
+        return Transactions(res).sort()
+
     def run(self, days: int, account_suffix: str = ' - Prediction', max_per_day: Optional[int] = None) -> Transactions:
         '''
         Runs the simulator for the specified number of days, returning the

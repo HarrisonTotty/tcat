@@ -69,3 +69,4 @@ def test_simulator():
     '''
     sim = Simulator(T.filter(bank='bank1', account='checking'))
     res = sim.run(30)
+    multi = sim.multi_run(5, 30)
