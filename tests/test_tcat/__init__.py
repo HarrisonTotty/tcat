@@ -13,6 +13,13 @@ import tcat
 
 # ----- Pre-Read CSV Content -----
 
+CREDIT_CSV_CONTENT = '''
+Date,Transaction,Name,Memo,Amount
+07/22/2020,"DEBIT","PIZZA PLANET","0123456789 2",-$2.21
+8/19/2020,"DEBIT","PIZZA PLANET","0123456789 1",($8.15)
+2021/02/03,"CREDIT","PAYMENT THANK YOU",";;;;;",$30.00
+'''.strip()
+
 CSV_CONTENT = '''
 Date,Description,Amount,Balance
 03/19/2020,"PIZZA PLANET 0123456789 2",-$9.47,-$16.18
