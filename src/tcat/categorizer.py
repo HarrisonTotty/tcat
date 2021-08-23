@@ -58,12 +58,17 @@ class Categorizer:
                 rendered['data'][i]['match'] = re.compile(d['match'].strip())
             self.data.append(rendered)
 
-    def cat(self, arg: Union[Transaction, Transactions], merge: bool = True) -> Union[Transaction, Transactions]:
+    def cat(
+        self,
+        arg: Union[Transaction, Transactions],
+        merge: bool = True,
+        tags: list[str] = []) -> Union[Transaction, Transactions]:
         '''
         Categorizes a transaction or collection of transactions, returning
         a categorized version of the input. If `merge` is set to `False`, any
         previously existing tags will be discarded instead of merged into the
-        new list of tags.
+        new list of tags. Additional tags defined by the `tags` argument will
+        be added to all transactions.
         '''
         if isinstance(arg, Transaction):
             cp = copy.deepcopy(arg)
@@ -71,9 +76,10 @@ class Categorizer:
             for d1 in self.data:
                 for d2 in d1['data']:
                     if d2['match'].search(desc):
-                        tags = cp.tags if merge else []
-                        if 'tags' in d1: tags.extend(d1['tags'])
-                        if 'tags' in d2: tags.extend(d2['tags'])
+                        ntags = cp.tags if merge else []
+                        if tags: ntags.extend(tags)
+                        if 'tags' in d1: ntags.extend(d1['tags'])
+                        if 'tags' in d2: ntags.extend(d2['tags'])
                         return Transaction(
                             account = cp.account,
                             amount  = cp.amount,
@@ -83,7 +89,7 @@ class Categorizer:
                             desc    = cp.desc,
                             name    = d2['name'],
                             note    = cp.note,
-                            tags    = list(set(tags))
+                            tags    = list(set(ntags))
                         )
             return cp
         elif isinstance(arg, Transactions):
