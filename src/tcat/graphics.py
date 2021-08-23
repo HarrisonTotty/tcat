@@ -159,7 +159,7 @@ def statistic_plot(
         ))
         num_traces += 1
     fig.update_layout(
-        showlegend  = len(num_traces) > 1,
+        showlegend  = num_traces > 1,
         title       = title,
         xaxis_title = 'Date',
         yaxis_title = STAT_TITLE[statistic]
@@ -301,6 +301,7 @@ def tag_trend_plot(
         if hide and tag in hide: continue
         if show and not tag in show: continue
         tags.append(tag)
+    num_traces = 0
     for tag in tags:
         by_date = transactions.filter(tags=tag).group(by=f'date-{scale}')
         dates = [d[0] for d in by_date]
@@ -313,8 +314,9 @@ def tag_trend_plot(
             x         = dates,
             y         = [s[statistic] for s in stats]
         ))
+        num_traces += 1
     fig.update_layout(
-        showlegend  = True,
+        showlegend  = num_traces > 1,
         title       = title,
         xaxis_title = 'Date',
         yaxis_title = STAT_TITLE[statistic]
