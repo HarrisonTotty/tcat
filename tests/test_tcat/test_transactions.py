@@ -183,8 +183,10 @@ def test_transactions_grouping():
     '''
     Tests the ability to group transactions.
     '''
+    account      = T.group(by='account')
     amount       = T.group(by='amount', drange=50)
     balance      = T.group(by='balance', drange=100)
+    bank         = T.group(by='bank')
     bank_account = T.group(by='bank-account')
     date_daily   = T.group(by='date-daily')
     date_weekly  = T.group(by='date-weekly')
@@ -193,6 +195,10 @@ def test_transactions_grouping():
     descs        = T.group(by='desc')
     names        = T.group(by='name')
     tags         = T.group(by='tags')
+    assert account == {
+        'checking': Transactions([T3, T1, T4]),
+        'savings': Transactions([T2])
+    }
     assert amount == {
         (-65.0, -15.0): Transactions([T4]),
         (-15.0, 35.0): Transactions([T3, T1, T2])
@@ -200,6 +206,10 @@ def test_transactions_grouping():
     assert balance == {
         (-17.0, 83.0): Transactions([T3, T1, T4]),
         (883.0, 983.0): Transactions([T2])
+    }
+    assert bank == {
+        'bank1': Transactions([T1, T2, T4]),
+        'bank2': Transactions([T3])
     }
     assert bank_account == {
         ('bank1', 'checking'): Transactions([T1, T4]),

@@ -432,6 +432,8 @@ class Transactions:
         '''
         Groups transactions by one of the following criteria:
           * key = str
+            * account
+            * bank
             * desc
             * name
           * key = tuple[date, date]
@@ -469,6 +471,12 @@ class Transactions:
             for bank in self.banks():
                 for account in self.accounts(bank):
                     res[(bank, account)] = Transactions([t for t in items if t.bank == bank and t.account == account]).sort()
+        elif by == 'account':
+            for account in self.accounts():
+                res[account] = Transactions([t for t in items if t.account == account]).sort()
+        elif by == 'bank':
+            for bank in self.banks():
+                res[bank] = Transactions([t for t in items if t.bank == bank]).sort()
         elif by.startswith('date-'):
             freq = {
                 'date-daily': (dateutil.rrule.DAILY, items[0].date, dateutil.relativedelta.relativedelta(days=1)),
