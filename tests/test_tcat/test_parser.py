@@ -20,6 +20,14 @@ def test_amount_string_conversions():
     assert Parser.amount_to_str(5.89)         == '$5.89'
     assert Parser.amount_to_str(-986.344)     == '-$986.34'
 
+def test_clean_desc():
+    '''
+    Tests the `Parser.clean_desc()` function.
+    '''
+    assert Parser.clean_desc('100%%')                == '100%'
+    assert Parser.clean_desc('D&amp;D')              == 'D&D'
+    assert Parser.clean_desc('Bill &amp; Ted&#39;s') == "Bill & Ted's"
+
 def test_parse_credit_csv_content():
     '''
     Tests the ability of the parser to parse credit CSV content.

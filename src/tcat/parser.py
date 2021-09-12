@@ -44,6 +44,13 @@ class Parser:
         if amount < 0: return '-${0:.2f}'.format(ra)
         return '${0:.2f}'.format(ra)
 
+    @staticmethod
+    def clean_desc(desc: str) -> str:
+        '''
+        Cleans unwanted characters from a transaction description.
+        '''
+        return desc.strip().replace('&#39;', "'").replace('&amp;', '&').replace('%%', '%')
+
     def parse_credit_csv(
         self,
         path: str,
@@ -135,8 +142,8 @@ class Parser:
             raise Exception(f'unable to parse CSV content - {e}')
         tdata = []
         for entry in csv_data:
-            amount_str  = next(entry[k] for k in entry.keys() if k.lower() in ['amt', 'amount'])
-            date_str    = next(entry[k] for k in entry.keys() if k.lower() == 'date')
+            amount_str  = next(entry[k].strip() for k in entry.keys() if k.lower() in ['amt', 'amount'])
+            date_str    = next(entry[k].strip() for k in entry.keys() if k.lower() == 'date')
             desc        = ' '.join(entry[k] for k in entry.keys() if k.lower() in ['desc', 'description', 'memo', 'name'])
             if 'misc' in entry and entry['misc']:
                 note = f'Additional CSV Data: {entry["misc"]}'
@@ -147,7 +154,7 @@ class Parser:
                 'amount': Parser.amount_from_str(amount_str),
                 'bank': card_issuer,
                 'date': dp.parse(date_str).date(),
-                'desc': desc,
+                'desc': Parser.clean_desc(desc),
                 'note': note
             })
         tdata = sorted(tdata, key = lambda x: x['date'], reverse = not ref_bal_start)
@@ -219,9 +226,9 @@ class Parser:
             raise Exception(f'unable to parse CSV content - {e}')
         transactions = []
         for entry in csv_data:
-            amount_str  = next(entry[k] for k in entry.keys() if k.lower() in ['amt', 'amount'])
-            balance_str = next(entry[k] for k in entry.keys() if k.lower() in ['bal', 'balance'])
-            date_str    = next(entry[k] for k in entry.keys() if k.lower() == 'date')
+            amount_str  = next(entry[k].strip() for k in entry.keys() if k.lower() in ['amt', 'amount'])
+            balance_str = next(entry[k].strip() for k in entry.keys() if k.lower() in ['bal', 'balance'])
+            date_str    = next(entry[k].strip() for k in entry.keys() if k.lower() == 'date')
             desc        = next(entry[k] for k in entry.keys() if k.lower() in ['desc', 'description'])
             if 'misc' in entry and entry['misc']:
                 note = f'Additional CSV Data: {entry["misc"]}'
@@ -233,7 +240,7 @@ class Parser:
                 balance = Parser.amount_from_str(balance_str),
                 bank    = bank,
                 date    = dp.parse(date_str).date(),
-                desc    = desc,
+                desc    = Parser.clean_desc(desc),
                 note    = note
             ))
         return Transactions(transactions)
