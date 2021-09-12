@@ -16,41 +16,41 @@ from .transaction import Transaction, Transactions
 STAT_TITLE = {
     'count': 'Number of Transactions',
     'max_abs_amount': 'Maximum Absolute Transaction Amount ($)',
-    'max_abs_balance': 'Maximum Absolute Account Balance ($)',
+    'max_abs_balance': 'Maximum Absolute Balance ($)',
     'max_amount': 'Maximum Transaction Amount ($)',
-    'max_balance': 'Maximum Account Balance ($)',
+    'max_balance': 'Maximum Balance ($)',
     'mean_abs_amount': 'Mean Absolute Transaction Amount ($)',
-    'mean_abs_balance': 'Mean Absolute Account Balance ($)',
+    'mean_abs_balance': 'Mean Absolute Balance ($)',
     'mean_amount': 'Mean Transaction Amount ($)',
-    'mean_balance': 'Mean Transaction Balance ($)',
+    'mean_balance': 'Mean Balance ($)',
     'mean_freq_daily': 'Mean Transaction Frequency (per day)',
     'mean_freq_monthly': 'Mean Transaction Frequency (per month)',
     'mean_freq_weekly': 'Mean Transaction Frequency (per week)',
     'mean_freq_yearly': 'Mean Transaction Frequency (per year)',
     'median_abs_amount': 'Median Absolute Transaction Amount ($)',
-    'median_abs_balance': 'Median Absolute Account Balance ($)',
+    'median_abs_balance': 'Median Absolute Balance ($)',
     'median_amount': 'Median Transaction Amount ($)',
-    'median_balance': 'Median Account Balance ($)',
+    'median_balance': 'Median Balance ($)',
     'median_freq_daily': 'Mean Transaction Frequency (per day)',
     'median_freq_monthly': 'Median Transaction Frequency (per month)',
     'median_freq_weekly': 'Median Transaction Frequency (per week)',
     'median_freq_yearly': 'Median Transaction Frequency (per year)',
     'min_abs_amount': 'Minimum Absolute Transaction Amount ($)',
-    'min_abs_balance': 'Minimum Absolute Account Balance ($)',
+    'min_abs_balance': 'Minimum Absolute Balance ($)',
     'min_amount': 'Minimum Transaction Amount ($)',
-    'min_balance': 'Minimum Account Balance ($)',
+    'min_balance': 'Minimum Balance ($)',
     'stdev_abs_amount': 'Standard Deviation of Absolute Transaction Amount ($)',
-    'stdev_abs_balance': 'Standard Deviation of Absolute Account Balance ($)',
+    'stdev_abs_balance': 'Standard Deviation of Absolute Balance ($)',
     'stdev_amount': 'Standard Deviation of Transaction Amount ($)',
-    'stdev_balance': 'Standard Deviation of Account Balance ($)',
+    'stdev_balance': 'Standard Deviation of Balance ($)',
     'stdev_freq_daily': 'Standard Deviation Transaction Frequency (per day)',
     'stdev_freq_monthly': 'Standard Deviation Transaction Frequency (per month)',
     'stdev_freq_weekly': 'Standard Deviation Transaction Frequency (per week)',
     'stdev_freq_yearly': 'Standard Deviation Transaction Frequency (per year)',
     'total_abs_amount': 'Total Absolute Transaction Amount ($)',
-    'total_abs_balance': 'Total Absolute Account Balance ($)',
+    'total_abs_balance': 'Total Absolute Balance ($)',
     'total_amount': 'Total Transaction Amount ($)',
-    'total_balance': 'Total Account Balance ($)',
+    'total_balance': 'Total Balance ($)',
 }
 
 def balance_plot(
@@ -126,6 +126,7 @@ def balance_candle_plot(
 
 def statistic_plot(
     transactions: Transactions,
+    aggregate: bool = False,
     statistic: str = 'median_balance',
     scale: str = 'daily',
     style: str = 'lines',
@@ -135,29 +136,55 @@ def statistic_plot(
     specified statistic may be any key returned from the
     `Transactions.statistics()` method.
     Accepts the following arguments:
+      * aggregate
+        Whether to aggregate all accounts for a particular bank, displaying the
+        sum of the statistic for each account on the specified date scale. Note
+        that you'll probably want to set `scale` to something other than `daily`
+        to prevent sawtooth patterns in the trend line due to sparse data points
+        in savings accounts.
       * statistic
         The specified statistic to plot on the y-axis.
       * scale
         The range of dates associated with each data point. May be specified as
-        `daily`, `weekly`, `monthly`, or `yearly`.#!/usr/bin/env python
+        `daily`, `weekly`, `monthly`, or `yearly`.
+      * style
+        The plotting style of the function, being `lines`, `markers`, or
+        `lines+markers`.
       * title
         An optional title for the plot.
     '''
     fig = go.Figure()
     num_traces = 0
-    for (bank, account), account_trans in transactions.group(by=f'bank-account').items():
-        by_date = account_trans.group(by=f'date-{scale}')
-        dates = [d[0] for d in by_date]
-        stats = [by_date[d].statistics() for d in by_date]
-        hovertexts = [by_date[d].hovertext() for d in by_date]
-        fig.add_trace(go.Scatter(
-            hovertext = hovertexts,
-            mode      = style,
-            name      = f'{bank} ({account})',
-            x         = dates,
-            y         = [s[statistic] for s in stats]
-        ))
-        num_traces += 1
+    if aggregate:
+        for bank, bank_trans in transactions.group(by='bank').items():
+            dates = []
+            stats = []
+            for (start_date, end_date), date_trans in bank_trans.group(by=f'date-{scale}').items():
+                dates.append(start_date)
+                stats.append(
+                    sum([v.statistics()[statistic] for v in date_trans.group(by='account').values()])
+                )
+            fig.add_trace(go.Scatter(
+                mode      = style,
+                name      = bank,
+                x         = dates,
+                y         = stats
+            ))
+            num_traces += 1
+    else:
+        for (bank, account), account_trans in transactions.group(by=f'bank-account').items():
+            by_date = account_trans.group(by=f'date-{scale}')
+            dates = [d[0] for d in by_date]
+            stats = [by_date[d].statistics() for d in by_date]
+            hovertexts = [by_date[d].hovertext() for d in by_date]
+            fig.add_trace(go.Scatter(
+                hovertext = hovertexts,
+                mode      = style,
+                name      = f'{bank} ({account})',
+                x         = dates,
+                y         = [s[statistic] for s in stats]
+            ))
+            num_traces += 1
     fig.update_layout(
         showlegend  = num_traces > 1,
         title       = title,
