@@ -22,7 +22,7 @@ description = "A python library for analyzing my personal finances."
 name        = "tcat"
 readme      = "README.md"
 repository  = "https://github.com/HarrisonTotty/tcat"
-version     = "2.0.0"
+version     = "2.0.1"
 include     = ["src/tcat/*.yaml"]
 
 [tool.poetry.dependencies]
