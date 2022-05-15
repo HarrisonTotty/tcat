@@ -23,13 +23,12 @@ FROM python:3.9 as poetry
 
 ENV PIP_DISABLE_PIP_VERSION_CHECK=on \
     PIP_NO_CACHE_DIR=false \
-    POETRY_VERSION=1.1.7 \
     POETRY_VIRTUALENVS_CREATE=false \
     PYTHONFAULTHANDLER=1 \
     PYTHONHASHSEED=random \
     PYTHONUNBUFFERED=1
 
-RUN pip install "poetry==$POETRY_VERSION"
+RUN pip install poetry
 
 
 FROM poetry as import
