@@ -1,3 +1,5 @@
+![Python Version](https://img.shields.io/badge/Python-3.9-blue?style=flat-square) ![GitHub last commit](https://img.shields.io/github/last-commit/HarrisonTotty/tcat?style=flat-square)
+
 # Financial Analytics Platform
 
 A python library for analyzing personal financial data.
