@@ -1,12 +1,7 @@
 '''
-Financial Analytics Platform
+Personal Finance Analysis Platform
 
-A python library for analyzing my personal finances.
+A python library for analyzing personal finances.
 '''
 
-__VERSION__ = "2.0.0"
-
-from .categorizer import Categorizer
-from .parser import Parser
-from .prediction import Simulator
-from .transaction import Transaction, Transactions
+__VERSION__ = "3.1.0"
